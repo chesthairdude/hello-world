@@ -1,34 +1,21 @@
-:root {
-  color-scheme: only light;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
 
-body {
-  font-family: "SF Pro Text", "Avenir Next", "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #1a5fb4, #0b2f6e);
-  color: #ffffff;
-}
-
-.page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-
-.hello {
-  margin: 0;
-  font-size: clamp(2.5rem, 8vw, 7rem);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: lowercase;
+  body {
+    font-family: "SF Pro Text", "Avenir Next", "Segoe UI", Arial, sans-serif;
+    background: radial-gradient(circle at top, #111827, #030712 70%);
+    color: #e5e7eb;
+  }
 }
