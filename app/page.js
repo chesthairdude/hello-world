@@ -1,14 +1,17 @@
-import { supabase } from "./lib/supabaseClient";
+import { getSupabaseClient } from "./lib/supabaseClient";
 
 export const revalidate = 0;
 
 export default async function Home() {
-  const { data: images, error } = await supabase
-    .from("images")
-    .select(
-      "id, url, image_description, additional_context, celebrity_recognition, is_public, created_datetime_utc"
-    )
-    .order("created_datetime_utc", { ascending: false });
+  const { client: supabase, error: envError } = getSupabaseClient();
+  const { data: images, error } = supabase
+    ? await supabase
+        .from("images")
+        .select(
+          "id, url, image_description, additional_context, celebrity_recognition, is_public, created_datetime_utc"
+        )
+        .order("created_datetime_utc", { ascending: false })
+    : { data: null, error: { message: envError } };
 
   return (
     <main className="min-h-screen px-6 py-12">
