@@ -15,6 +15,8 @@ export default async function ProtectedPage() {
     .select(
       "id, caption_content:content, image:images(id, url, image_description, additional_context)"
     )
+    .not("content", "is", null)
+    .not("content", "eq", "")
     .order("created_datetime_utc", { ascending: false });
 
   const items =
