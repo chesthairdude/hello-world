@@ -136,7 +136,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
               <img
                 src={current.imageUrl}
                 alt="Caption image"
-                className="m-3 block max-h-[58vh] w-[calc(100%-1.5rem)] rounded-2xl border-4 border-white object-contain shadow-2xl shadow-slate-400/55"
+                className="block max-h-[58vh] w-full rounded-2xl border-4 border-white object-contain shadow-2xl shadow-slate-400/55"
               />
             ) : (
               <div className="flex h-80 items-center justify-center text-sm text-slate-500">
@@ -158,7 +158,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
             onClick={() => submitVote(-1, "left")}
             disabled={isSubmitting}
             aria-label="Dislike (swipe left)"
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl font-bold text-red-600 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-5xl font-bold text-red-600 shadow-xl shadow-slate-300/70 transition hover:scale-105 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             ✕
           </button>
@@ -167,7 +167,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
             onClick={() => submitVote(1, "right")}
             disabled={isSubmitting}
             aria-label="Like (swipe right)"
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl font-bold text-emerald-600 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-5xl font-bold text-emerald-600 shadow-xl shadow-slate-300/70 transition hover:scale-105 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             ✓
           </button>
