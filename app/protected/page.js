@@ -31,9 +31,9 @@ export default async function ProtectedPage() {
     }) ?? [];
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_15%_10%,#155e75_0%,#0f172a_34%,#020617_70%)] px-6 py-10">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <header className="rounded-3xl border border-white/15 bg-slate-950/45 p-6 shadow-lg shadow-black/25 backdrop-blur">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_15%_10%,#155e75_0%,#0f172a_34%,#020617_70%)] px-8 py-14 sm:px-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
+        <header className="rounded-3xl border border-white/15 bg-slate-950/45 p-8 shadow-lg shadow-black/25 backdrop-blur">
           <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/80">
             Protected Rating
           </p>
