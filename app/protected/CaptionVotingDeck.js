@@ -119,15 +119,15 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
               <img
                 src={current.imageUrl}
                 alt="Caption image"
-                className="block h-[30rem] w-full object-cover"
+                className="block max-h-[70vh] w-full object-contain"
               />
             ) : (
               <div className="flex h-80 items-center justify-center text-sm text-slate-300">
                 Missing image URL
               </div>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/90 via-black/55 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-10">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-44 bg-gradient-to-t from-black/95 via-black/70 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 z-20 px-4 pb-4 pt-14">
               <p className="text-base font-semibold leading-snug text-white">
                 {captionText || `No text in captions.content (caption id: ${current.captionId})`}
               </p>
