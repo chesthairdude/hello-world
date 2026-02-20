@@ -90,9 +90,9 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
 
   if (initialItems.length === 0) {
     return (
-      <section className="rounded-3xl border border-white/15 bg-white/5 p-8 text-center shadow-xl shadow-black/25">
-        <h2 className="text-2xl font-semibold text-white">No captions available</h2>
-        <p className="mt-2 text-slate-300">
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl shadow-slate-300/50">
+        <h2 className="text-2xl font-semibold text-slate-900">No captions available</h2>
+        <p className="mt-2 text-slate-600">
           Add captions in the database and refresh to start rating.
         </p>
       </section>
@@ -101,9 +101,9 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
 
   if (!current) {
     return (
-      <section className="rounded-3xl border border-emerald-300/30 bg-emerald-500/10 p-8 text-center shadow-xl shadow-black/25">
-        <h2 className="text-2xl font-semibold text-emerald-100">All done</h2>
-        <p className="mt-2 text-emerald-50/90">
+      <section className="rounded-3xl border border-emerald-300 bg-emerald-50 p-8 text-center shadow-xl shadow-emerald-100">
+        <h2 className="text-2xl font-semibold text-emerald-700">All done</h2>
+        <p className="mt-2 text-emerald-600">
           You rated all available captions for now.
         </p>
       </section>
@@ -111,19 +111,19 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-3xl border border-white/20 bg-slate-900/65 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-10">
+    <section className="mx-auto w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-300/50 sm:p-10">
       <div className="space-y-5">
         <div className="space-y-2 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/85">
+          <p className="text-xs uppercase tracking-[0.3em] text-cyan-700">
             Caption Rating
           </p>
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
             Image {completedCount + 1} of {initialItems.length}
           </p>
         </div>
 
         <div
-          className={`mx-auto w-full max-w-sm transition duration-300 ease-out ${
+          className={`mx-auto w-full max-w-xs transition duration-300 ease-out sm:max-w-sm ${
             swipeDirection === "right"
               ? "translate-x-[130%] rotate-12 opacity-0"
               : swipeDirection === "left"
@@ -131,15 +131,15 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
                 : "translate-x-0 rotate-0 opacity-100"
           }`}
         >
-          <div className="relative overflow-hidden rounded-3xl border-2 border-cyan-200/60 bg-slate-950 shadow-[0_0_0_1px_rgba(255,255,255,0.16),0_18px_40px_rgba(2,132,199,0.3)]">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_14px_35px_rgba(15,23,42,0.16)]">
             {current.imageUrl ? (
               <img
                 src={current.imageUrl}
                 alt="Caption image"
-                className="block max-h-[70vh] w-full object-contain"
+                className="m-3 block max-h-[58vh] w-[calc(100%-1.5rem)] rounded-2xl border-4 border-white object-contain shadow-2xl shadow-slate-400/55"
               />
             ) : (
-              <div className="flex h-80 items-center justify-center text-sm text-slate-300">
+              <div className="flex h-80 items-center justify-center text-sm text-slate-500">
                 Missing image URL
               </div>
             )}
@@ -147,18 +147,18 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
         </div>
 
         <div className="space-y-3 text-center">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">
+          <h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
             {captionText || `No text in captions.content (caption id: ${current.captionId})`}
           </h2>
         </div>
 
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-6">
           <button
             type="button"
             onClick={() => submitVote(-1, "left")}
             disabled={isSubmitting}
             aria-label="Dislike (swipe left)"
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-rose-300/70 bg-rose-500/20 text-3xl font-bold text-rose-100 transition hover:scale-105 hover:bg-rose-500/35 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl font-bold text-red-600 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             ✕
           </button>
@@ -167,14 +167,14 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
             onClick={() => submitVote(1, "right")}
             disabled={isSubmitting}
             aria-label="Like (swipe right)"
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-emerald-300/70 bg-emerald-500/20 text-3xl font-bold text-emerald-100 transition hover:scale-105 hover:bg-emerald-500/35 disabled:cursor-not-allowed disabled:opacity-70"
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-4xl font-bold text-emerald-600 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             ✓
           </button>
         </div>
 
         {isSubmitting ? (
-          <p className="text-center text-sm text-slate-300">
+          <p className="text-center text-sm text-slate-500">
             {swipeDirection === "right"
               ? "Swiping right..."
               : swipeDirection === "left"
@@ -183,14 +183,8 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
           </p>
         ) : null}
 
-        {current.additionalContext ? (
-          <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-sm leading-relaxed text-slate-200">
-            {current.additionalContext}
-          </p>
-        ) : null}
-
         {error ? (
-          <p className="rounded-lg border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">
+          <p className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
             {error}
           </p>
         ) : null}

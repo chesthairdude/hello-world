@@ -52,9 +52,7 @@ export default async function ProtectedPage() {
 
   const { data: captions, error } = await supabase
     .from("captions")
-    .select(
-      "id, caption_content:content, image:images!inner(id, url, additional_context)"
-    )
+    .select("id, caption_content:content, image:images!inner(id, url)")
     .not("content", "is", null)
     .not("content", "eq", "")
     .not("images.url", "is", null)
@@ -69,7 +67,6 @@ export default async function ProtectedPage() {
         captionContent: caption.caption_content,
         imageId: image?.id ?? null,
         imageUrl: image?.url ?? null,
-        additionalContext: image?.additional_context ?? "",
       };
     })
     .filter(
@@ -88,22 +85,22 @@ export default async function ProtectedPage() {
   const items = shuffleItems(mappedItems);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_15%_10%,#155e75_0%,#0f172a_34%,#020617_70%)] px-8 py-14 sm:px-12">
+    <main className="min-h-screen bg-white px-10 py-16 sm:px-16">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
-        <header className="rounded-3xl border border-white/15 bg-slate-950/45 p-8 shadow-lg shadow-black/25 backdrop-blur">
-          <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/80">
+        <header className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-300/50">
+          <p className="text-xs uppercase tracking-[0.35em] text-cyan-700">
             Protected Rating
           </p>
-          <h1 className="mt-2 text-4xl font-semibold text-white sm:text-5xl">
+          <h1 className="mt-2 text-4xl font-semibold text-slate-900 sm:text-5xl">
             Caption Voting
           </h1>
-          <p className="mt-3 max-w-2xl text-base text-slate-200">
+          <p className="mt-3 max-w-2xl text-base text-slate-700">
             Signed in as <span className="font-semibold">{user?.email}</span>
           </p>
         </header>
 
         {error || voteHistoryError ? (
-          <div className="rounded-2xl border border-red-500/40 bg-red-500/10 p-6 text-red-100 shadow-lg shadow-black/25">
+          <div className="rounded-2xl border border-red-300 bg-red-50 p-6 text-red-700 shadow-lg shadow-red-100">
             Failed to load captions: {(error || voteHistoryError).message}
           </div>
         ) : (

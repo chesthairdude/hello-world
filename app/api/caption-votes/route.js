@@ -31,63 +31,21 @@ export async function POST(request) {
     );
   }
 
-  const { data: targetCaption, error: targetCaptionError } = await supabase
-    .from("captions")
-    .select("id, image_id")
-    .eq("id", captionId)
-    .single();
-
-  if (targetCaptionError || !targetCaption) {
-    return NextResponse.json({ error: "Caption not found" }, { status: 404 });
-  }
-
-  const { data: captionsForImage, error: captionsForImageError } = await supabase
-    .from("captions")
-    .select("id")
-    .eq("image_id", targetCaption.image_id);
-
-  if (captionsForImageError) {
-    return NextResponse.json({ error: captionsForImageError.message }, { status: 500 });
-  }
-
-  const imageCaptionIds = (captionsForImage ?? []).map((caption) => caption.id);
-
-  if (imageCaptionIds.length > 0) {
-    const { data: existingVotes, error: existingVotesError } = await supabase
-      .from("caption_votes")
-      .select("id")
-      .eq("profile_id", user.id)
-      .in("caption_id", imageCaptionIds)
-      .limit(1);
-
-    if (existingVotesError) {
-      return NextResponse.json({ error: existingVotesError.message }, { status: 500 });
-    }
-
-    if (existingVotes && existingVotes.length > 0) {
-      return NextResponse.json(
-        { error: "You have already voted on this image" },
-        { status: 409 }
-      );
-    }
-  }
-
   const now = new Date().toISOString();
-  const { error } = await supabase.from("caption_votes").insert({
-    caption_id: captionId,
-    profile_id: user.id,
-    vote_value: voteValue,
-    created_datetime_utc: now,
-    modified_datetime_utc: now,
-  });
+  const { error } = await supabase.from("caption_votes").upsert(
+    {
+      caption_id: captionId,
+      profile_id: user.id,
+      vote_value: voteValue,
+      created_datetime_utc: now,
+      modified_datetime_utc: now,
+    },
+    {
+      onConflict: "profile_id,caption_id",
+    }
+  );
 
   if (error) {
-    if (error.code === "23505") {
-      return NextResponse.json(
-        { error: "You have already voted on this image" },
-        { status: 409 }
-      );
-    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

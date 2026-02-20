@@ -10,32 +10,32 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <main className="min-h-screen px-6 py-12">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 rounded-2xl border border-slate-700/70 bg-slate-900/50 p-8">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.35em] text-slate-400">
+    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12 sm:px-10">
+      <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-8 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-2xl shadow-slate-300/50 sm:p-12">
+        <div className="space-y-3">
+          <p className="text-xs uppercase tracking-[0.35em] text-cyan-700">
             Google OAuth Gate
           </p>
-          <h1 className="text-4xl font-semibold text-white">Welcome</h1>
-          <p className="text-slate-300">
+          <h1 className="text-4xl font-semibold text-slate-900 sm:text-5xl">Welcome</h1>
+          <p className="text-slate-600">
             A protected route is available at <code>/protected</code>.
           </p>
         </div>
 
         {user ? (
-          <div className="space-y-4">
-            <p className="text-slate-200">Signed in as {user.email}</p>
-            <div className="flex flex-wrap items-center gap-3">
+          <div className="space-y-5">
+            <p className="text-slate-700">Signed in as {user.email}</p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/protected"
-                className="rounded-lg bg-white px-4 py-2 font-medium text-slate-900"
+                className="rounded-full bg-slate-900 px-6 py-3 font-semibold text-white shadow-lg shadow-slate-300 transition hover:bg-slate-800"
               >
                 Open protected route
               </Link>
               <form action="/auth/signout" method="post">
                 <button
                   type="submit"
-                  className="rounded-lg border border-slate-500 px-4 py-2 font-medium text-slate-200"
+                  className="rounded-full border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 shadow-lg shadow-slate-200 transition hover:bg-slate-100"
                 >
                   Sign out
                 </button>
@@ -43,13 +43,13 @@ export default async function Home() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <p className="text-slate-300">
+          <div className="space-y-5">
+            <p className="text-slate-600">
               You are not signed in. Access to <code>/protected</code> is gated.
             </p>
             <a
               href="/auth/login"
-              className="inline-flex rounded-lg bg-white px-4 py-2 font-medium text-slate-900"
+              className="inline-flex rounded-full bg-slate-900 px-6 py-3 font-semibold text-white shadow-lg shadow-slate-300 transition hover:bg-slate-800"
             >
               Sign in with Google
             </a>
