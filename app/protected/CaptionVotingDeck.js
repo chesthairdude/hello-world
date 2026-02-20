@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const SWIPE_DURATION_MS = 280;
 
@@ -9,6 +9,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [swipeDirection, setSwipeDirection] = useState(null);
+  const isSubmittingRef = useRef(false);
 
   const current = useMemo(() => items[0] ?? null, [items]);
   const completedCount = initialItems.length - items.length;
@@ -23,10 +24,16 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
   }, [current?.captionId]);
 
   async function submitVote(voteValue, direction) {
-    if (!current || isSubmitting) {
+    if (!current || isSubmittingRef.current) {
       return;
     }
 
+    if (!current.captionId || typeof current.captionId !== "string") {
+      setItems((previous) => previous.slice(1));
+      return;
+    }
+
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     setError("");
     setSwipeDirection(direction);
@@ -47,7 +54,12 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
         }),
       });
 
-      const result = await response.json();
+      let result = {};
+      try {
+        result = await response.json();
+      } catch {
+        result = {};
+      }
 
       if (!response.ok) {
         if (
@@ -55,6 +67,10 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
           typeof result?.error === "string" &&
           result.error.toLowerCase().includes("already voted")
         ) {
+          setItems((previous) => previous.slice(1));
+          return;
+        }
+        if (response.status === 400 || response.status === 404) {
           setItems((previous) => previous.slice(1));
           return;
         }
@@ -67,6 +83,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
       setSwipeDirection(null);
       setError(err.message || "Failed to submit vote");
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -126,13 +143,13 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
                 Missing image URL
               </div>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-44 bg-gradient-to-t from-black/95 via-black/70 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 z-20 px-4 pb-4 pt-14">
-              <p className="text-base font-semibold leading-snug text-white">
-                {captionText || `No text in captions.content (caption id: ${current.captionId})`}
-              </p>
-            </div>
           </div>
+        </div>
+
+        <div className="space-y-3 text-center">
+          <h2 className="text-2xl font-semibold text-white sm:text-3xl">
+            {captionText || `No text in captions.content (caption id: ${current.captionId})`}
+          </h2>
         </div>
 
         <div className="flex items-center justify-center gap-4">
