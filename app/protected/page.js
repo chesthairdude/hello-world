@@ -13,7 +13,7 @@ export default async function ProtectedPage() {
   const { data: captions, error } = await supabase
     .from("captions")
     .select(
-      "id, content, image:images(id, url, image_description, additional_context)"
+      "id, caption_content:content, image:images(id, url, image_description, additional_context)"
     )
     .order("created_datetime_utc", { ascending: false });
 
@@ -22,7 +22,7 @@ export default async function ProtectedPage() {
       const image = Array.isArray(caption.image) ? caption.image[0] : caption.image;
       return {
         captionId: caption.id,
-        captionContent: caption.content,
+        captionContent: caption.caption_content,
         imageId: image?.id ?? null,
         imageUrl: image?.url ?? null,
         imageDescription: image?.image_description ?? "",
