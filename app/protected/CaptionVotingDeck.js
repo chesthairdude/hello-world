@@ -9,6 +9,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
 
   const current = useMemo(() => items[0] ?? null, [items]);
   const completedCount = initialItems.length - items.length;
+  const captionText = current?.captionContent ?? "Untitled caption";
 
   async function submitVote(voteValue) {
     if (!current || isSubmitting) {
@@ -121,7 +122,7 @@ export default function CaptionVotingDeck({ initialItems = [] }) {
 
         <div className="space-y-3 text-center">
           <h2 className="text-2xl font-semibold text-white sm:text-3xl">
-            {current.captionContent || "Untitled caption"}
+            {captionText}
           </h2>
           {current.imageDescription ? (
             <p className="text-sm text-slate-300">{current.imageDescription}</p>
