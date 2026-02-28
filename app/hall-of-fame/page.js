@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { createClient } from "../../utils/supabase/client";
 import HallOfFameCarousel from "./HallOfFameCarousel";
 import ThemeToggleButton from "../components/ThemeToggleButton";
-import PageTransition from "../components/PageTransition";
 
 let cachedHallOfFame = null;
 let cachedAverageVotesPerImage = 0;
@@ -367,38 +366,36 @@ export default function HallOfFamePage() {
           fontFamily: "var(--font-geist-sans)",
         }}
       >
-        <PageTransition>
-          <div>
-            <div style={{ marginBottom: "36px", textAlign: "center" }}>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--text-tertiary)",
-                  marginBottom: "8px",
-                }}
-              >
-                Hall of Fame
-              </p>
-              <h1
-                style={{
-                  fontSize: "28px",
-                  fontWeight: 700,
-                  letterSpacing: "-0.03em",
-                  color: "var(--text-primary)",
-                }}
-              >
-                The Funniest of All Time
-              </h1>
-              <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "8px" }}>
-                Top 20 by community vote · minimum avg votes/image ({averageVotesPerImage.toFixed(1)})
-              </p>
-            </div>
-            <HallOfFameCarousel items={items} />
+        <div style={{ animation: "pageEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" }}>
+          <div style={{ marginBottom: "36px", textAlign: "center" }}>
+            <p
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--text-tertiary)",
+                marginBottom: "8px",
+              }}
+            >
+              Hall of Fame
+            </p>
+            <h1
+              style={{
+                fontSize: "28px",
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
+                color: "var(--text-primary)",
+              }}
+            >
+              The Funniest of All Time
+            </h1>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "8px" }}>
+              Top 20 by community vote · minimum avg votes/image ({averageVotesPerImage.toFixed(1)})
+            </p>
           </div>
-        </PageTransition>
+          <HallOfFameCarousel items={items} />
+        </div>
       </main>
     </>
   );

@@ -6,11 +6,6 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-let cachedVoteItems = null;
-
-export function setCachedVoteItems(items) {
-  cachedVoteItems = items;
-}
 
 function getSentimentCategory(funnyPercent) {
   if (funnyPercent >= 75) {
@@ -36,7 +31,7 @@ function calculateFunnyPercent(likeCount, dislikeCount) {
 export default function VoteDeck({ initialItems = [] }) {
   const { isDark } = useTheme();
   const supabase = useMemo(() => createClient(), []);
-  const [items, setItems] = useState(() => cachedVoteItems ?? initialItems);
+  const [items, setItems] = useState(initialItems);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [swipeDirection, setSwipeDirection] = useState(null);
@@ -62,10 +57,6 @@ export default function VoteDeck({ initialItems = [] }) {
       : String(current.captionContent);
   const captionText = rawCaptionText.trim();
   const hasVotes = likeCount + dislikeCount > 0;
-
-  useEffect(() => {
-    cachedVoteItems = items;
-  }, [items]);
 
   useEffect(() => {
     setSwipeDirection(null);
@@ -270,7 +261,7 @@ export default function VoteDeck({ initialItems = [] }) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-[420px]">
+    <section className="mx-auto w-full max-w-[400px]">
       {initialItems.length === 0 ? (
         <div className="vote-card p-6 text-center" style={{ color: "var(--text-secondary)" }}>
           No captions available yet.
@@ -280,24 +271,12 @@ export default function VoteDeck({ initialItems = [] }) {
           You have voted on all available captions.
         </div>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "700px",
-            width: "100%",
-            maxWidth: "420px",
-          }}
-        >
+        <>
           <article
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             className="vote-card swipe-card relative overflow-hidden"
             style={{
-              width: "100%",
-              height: "480px",
-              flexShrink: 0,
               opacity: swipeDirection ? 0 : 1,
               transform:
                 swipeDirection === "left"
@@ -326,8 +305,7 @@ export default function VoteDeck({ initialItems = [] }) {
                   <div
                     style={{
                       width: "100%",
-                      height: "340px",
-                      flexShrink: 0,
+                      maxHeight: "420px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -340,8 +318,8 @@ export default function VoteDeck({ initialItems = [] }) {
                       src={current.imageUrl}
                       alt="Caption candidate"
                       style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
+                        width: "100%",
+                        height: "100%",
                         objectFit: "contain",
                         objectPosition: "center",
                         backgroundColor: "var(--card-bg)",
@@ -353,8 +331,7 @@ export default function VoteDeck({ initialItems = [] }) {
                   <div
                     className="flex w-full items-center justify-center rounded-t-[20px] text-sm"
                     style={{
-                      height: "340px",
-                      flexShrink: 0,
+                      minHeight: "320px",
                       background: "var(--stats-bg)",
                       color: "var(--text-secondary)",
                     }}
@@ -362,30 +339,17 @@ export default function VoteDeck({ initialItems = [] }) {
                     Missing image
                   </div>
                 )}
-                <div
-                  style={{
-                    height: "140px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "16px 32px",
-                    overflow: "hidden",
-                  }}
-                >
+                <div style={{ padding: "24px 32px 32px" }} className="flex items-center justify-center">
                   <p
                     style={{
                       textAlign: "center",
-                      fontSize: "17px",
+                      fontSize: "18px",
                       fontWeight: 600,
                       lineHeight: 1.5,
                       color: "var(--text-primary)",
                       letterSpacing: "-0.01em",
                       maxWidth: "320px",
                       margin: "0 auto",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 4,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
                     }}
                   >
                     {captionText || `Caption unavailable (${current.captionId})`}
@@ -394,7 +358,7 @@ export default function VoteDeck({ initialItems = [] }) {
               </div>
             </article>
 
-          <div style={{ width: "100%", marginTop: "20px", flexShrink: 0 }}>
+          <div style={{ marginTop: "28px", width: "100%" }}>
             <div
               style={{
                 marginBottom: "8px",
@@ -431,7 +395,7 @@ export default function VoteDeck({ initialItems = [] }) {
                     transition: "color 0.3s ease",
                   }}
                 >
-                  {dislikeCount} not funny 😐
+                  {dislikeCount} not funny 💀
                 </span>
               </div>
 
@@ -498,14 +462,12 @@ export default function VoteDeck({ initialItems = [] }) {
 
           <div
             style={{
-              marginTop: "auto",
-              paddingBottom: "8px",
+              paddingTop: "44px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "60px",
               width: "100%",
-              flexShrink: 0,
             }}
           >
             <button
@@ -581,7 +543,7 @@ export default function VoteDeck({ initialItems = [] }) {
               ✓
             </button>
           </div>
-        </div>
+        </>
       )}
 
       {error ? (

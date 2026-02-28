@@ -5,7 +5,6 @@ import { useState } from "react";
 import VoteDeck from "./VoteDeck";
 import UploadPanel from "./UploadPanel";
 import ThemeToggleButton from "../components/ThemeToggleButton";
-import PageTransition from "../components/PageTransition";
 
 export default function VoteWorkspace({ initialItems = [], userEmail = "", initialMode = "vote" }) {
   const [mode, setMode] = useState(initialMode === "upload" ? "upload" : "vote");
@@ -230,22 +229,20 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           padding: "32px 24px",
         }}
       >
-        <PageTransition>
-          <div
-            style={{
-              width: "100%",
-              maxWidth: mode === "vote" ? "400px" : uploadExpanded ? "900px" : "480px",
-              margin: "0 auto",
-              transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            {mode === "vote" ? (
-              <VoteDeck initialItems={initialItems} />
-            ) : (
-              <UploadPanel onResultsChange={setUploadExpanded} />
-            )}
-          </div>
-        </PageTransition>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: mode === "vote" ? "400px" : uploadExpanded ? "900px" : "480px",
+            margin: "0 auto",
+            transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}
+        >
+          {mode === "vote" ? (
+            <VoteDeck initialItems={initialItems} />
+          ) : (
+            <UploadPanel onResultsChange={setUploadExpanded} />
+          )}
+        </div>
       </section>
     </main>
   );
