@@ -77,13 +77,15 @@ export default function HallOfFameCarousel({ items = [] }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        justifyContent: "center",
         width: "100%",
         maxWidth: "420px",
-        minHeight: "calc(100vh - 64px)",
+        minHeight: "100vh",
+        paddingTop: "32px",
+        paddingBottom: "32px",
+        boxSizing: "border-box",
       }}
     >
-      <div style={{ flex: 1, minHeight: "32px", maxHeight: "120px" }} />
-
       <div
         style={{
           width: "100%",
@@ -354,8 +356,6 @@ export default function HallOfFameCarousel({ items = [] }) {
           </button>
         </div>
       </div>
-
-      <div style={{ height: "32px", flexShrink: 0 }} />
     </div>
   );
 }

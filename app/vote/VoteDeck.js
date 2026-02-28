@@ -539,7 +539,11 @@ export default function VoteDeck({ initialItems = [] }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        minHeight: "calc(100vh - 64px)",
+        justifyContent: "center",
+        minHeight: "100vh",
+        paddingTop: "32px",
+        paddingBottom: "32px",
+        boxSizing: "border-box",
       }}
     >
       {initialItems.length === 0 ? (
@@ -552,8 +556,6 @@ export default function VoteDeck({ initialItems = [] }) {
         </div>
       ) : (
         <>
-          <div style={{ flex: 1, minHeight: "32px", maxHeight: "120px" }} />
-
           <div
             style={{
               width: "100%",
@@ -907,8 +909,6 @@ export default function VoteDeck({ initialItems = [] }) {
               </button>
             </div>
           </div>
-
-          <div style={{ height: "32px", flexShrink: 0 }} />
         </>
       )}
 
