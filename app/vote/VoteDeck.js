@@ -894,8 +894,6 @@ export default function VoteDeck({ initialItems = [] }) {
               ✓
             </button>
           </div>
-
-          <div style={{ flex: 1 }} />
         </>
       )}
 
