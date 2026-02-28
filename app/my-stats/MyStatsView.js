@@ -71,6 +71,7 @@ export default function MyStatsView({
   totalRated,
   upvotes,
   downvotes,
+  imagesUploaded,
   consensusPercent,
   validConsensusVotes,
   email,
@@ -228,37 +229,39 @@ export default function MyStatsView({
           <span>My Stats</span>
         </Link>
 
-        <form action="/auth/signout" method="post">
-          <button
-            type="submit"
-            className="sidebar-nav-item"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 14px",
-              borderRadius: "12px",
-              border: "1px solid var(--glass-border)",
-              borderLeft: "3px solid transparent",
-              backgroundColor: "var(--nav-item-bg)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-primary)",
-              textAlign: "left",
-              width: "100%",
-              marginTop: "8px",
-            }}
-          >
-            <span style={{ fontSize: "18px" }}>↩</span>
-            <span>Sign Out</span>
-          </button>
-        </form>
+        <div style={{ marginTop: "auto" }}>
+          <form action="/auth/signout" method="post">
+            <button
+              type="submit"
+              className="sidebar-nav-item"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "10px 14px",
+                borderRadius: "12px",
+                border: "1px solid var(--glass-border)",
+                borderLeft: "3px solid transparent",
+                backgroundColor: "var(--nav-item-bg)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "var(--text-primary)",
+                textAlign: "left",
+                width: "100%",
+                marginTop: "8px",
+              }}
+            >
+              <span style={{ fontSize: "18px" }}>↩</span>
+              <span>Sign Out</span>
+            </button>
+          </form>
 
-        <ThemeToggleButton />
+          <ThemeToggleButton />
+        </div>
       </aside>
 
       <main
@@ -301,8 +304,9 @@ export default function MyStatsView({
               <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "4px" }}>{email}</p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "12px" }}>
               <StatCard emoji="🗳️" label="Total Rated" value={totalRated} sub="image/caption pairs" />
+              <StatCard emoji="🖼️" label="Images Uploaded" value={imagesUploaded} sub="your submissions" />
               <StatCard
                 emoji="😂"
                 label="Funny Votes"

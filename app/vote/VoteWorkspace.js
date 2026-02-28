@@ -62,6 +62,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
 
         <button
           type="button"
+          className="sidebar-nav-item"
           onClick={() => {
             setMode("vote");
             setUploadExpanded(false);
@@ -106,6 +107,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
 
         <Link
           href="/hall-of-fame"
+          className="sidebar-nav-item"
           style={{
             display: "flex",
             alignItems: "center",
@@ -144,6 +146,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
 
         <button
           type="button"
+          className="sidebar-nav-item"
           onClick={() => setMode("upload")}
           style={{
             display: "flex",
@@ -185,6 +188,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
 
         <Link
           href="/my-stats"
+          className="sidebar-nav-item"
           style={{
             display: "flex",
             alignItems: "center",
@@ -221,47 +225,50 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           <span>My Stats</span>
         </Link>
 
-        <form action="/auth/signout" method="post">
-          <button
-            type="submit"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 14px",
-              borderRadius: "12px",
-              border: "1px solid var(--glass-border)",
-              borderLeft: "3px solid transparent",
-              backgroundColor: "var(--nav-item-bg)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-primary)",
-              transition: "all 0.18s ease",
-              textAlign: "left",
-              width: "100%",
-              marginTop: "8px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
-              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--nav-item-bg)";
-              e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <span style={{ fontSize: "18px" }}>↩</span>
-            <span>Sign Out</span>
-          </button>
-        </form>
+        <div style={{ marginTop: "auto" }}>
+          <form action="/auth/signout" method="post">
+            <button
+              type="submit"
+              className="sidebar-nav-item"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "10px 14px",
+                borderRadius: "12px",
+                border: "1px solid var(--glass-border)",
+                borderLeft: "3px solid transparent",
+                backgroundColor: "var(--nav-item-bg)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "var(--text-primary)",
+                transition: "all 0.18s ease",
+                textAlign: "left",
+                width: "100%",
+                marginTop: "8px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--nav-item-bg)";
+                e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              <span style={{ fontSize: "18px" }}>↩</span>
+              <span>Sign Out</span>
+            </button>
+          </form>
 
-        <ThemeToggleButton />
+          <ThemeToggleButton />
+        </div>
       </aside>
 
       <section

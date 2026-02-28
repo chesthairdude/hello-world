@@ -23,6 +23,11 @@ export default async function MyStatsPage() {
     .from("caption_votes")
     .select("caption_id, vote_value");
 
+  const { count: imagesUploaded } = await supabase
+    .from("captions")
+    .select("id", { count: "exact", head: true })
+    .eq("profile_id", user.id);
+
   const totalRated = myVotes?.length ?? 0;
   const upvotes = myVotes?.filter((vote) => vote.vote_value === 1).length ?? 0;
   const downvotes = myVotes?.filter((vote) => vote.vote_value === -1).length ?? 0;
@@ -66,6 +71,7 @@ export default async function MyStatsPage() {
       totalRated={totalRated}
       upvotes={upvotes}
       downvotes={downvotes}
+      imagesUploaded={imagesUploaded ?? 0}
       consensusPercent={consensusPercent}
       validConsensusVotes={validConsensusVotes}
       email={user.email ?? ""}
