@@ -283,18 +283,6 @@ export default function MyStatsView({
             }}
           >
             <div style={{ marginBottom: "8px" }}>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--text-tertiary)",
-                  marginBottom: "6px",
-                }}
-              >
-                My Stats
-              </p>
               <h1
                 style={{
                   fontSize: "26px",
@@ -304,7 +292,7 @@ export default function MyStatsView({
                   margin: 0,
                 }}
               >
-                Your Voting Record
+                My Stats
               </h1>
               <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "4px" }}>{email}</p>
             </div>
@@ -328,11 +316,11 @@ export default function MyStatsView({
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-              {totalRated > 0 ? (
-                <div
-                  style={{
-                    padding: "16px 20px",
-                    borderRadius: "16px",
+            {totalRated > 0 ? (
+              <div
+                style={{
+                  padding: "16px 20px",
+                  borderRadius: "16px",
                     background: "var(--glass-bg)",
                     backdropFilter: "blur(32px) saturate(180%)",
                     WebkitBackdropFilter: "blur(32px) saturate(180%)",
@@ -340,33 +328,56 @@ export default function MyStatsView({
                     boxShadow: "var(--glass-highlight), var(--glass-shadow)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#4CDE80" }}>😂 Funny</span>
-                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#FF4458" }}>Not Funny 💀</span>
-                  </div>
-                  <div
-                    style={{
-                      position: "relative",
-                      height: "10px",
-                      width: "100%",
-                      borderRadius: "999px",
-                      overflow: "hidden",
-                      background: "rgba(255,68,88,0.4)",
-                      border: "1px solid var(--glass-border)",
-                    }}
-                  >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "space-around",
+                    gap: "20px",
+                    height: "140px",
+                    paddingTop: "8px",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: "#4CDE80", marginBottom: "8px" }}>
+                      {upvotePercent}%
+                    </span>
                     <div
                       style={{
-                        height: "100%",
-                        width: `${upvotePercent}%`,
-                        background: "linear-gradient(90deg, #4CDE80, #a8ff78)",
-                        borderRadius: "999px",
-                        transition: "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        width: "56px",
+                        height: `${Math.max(8, Math.round(upvotePercent))}%`,
+                        maxHeight: "100%",
+                        borderRadius: "12px 12px 6px 6px",
+                        background: "linear-gradient(180deg, #a8ff78 0%, #4CDE80 100%)",
+                        transition: "height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
                       }}
                     />
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#4CDE80", marginTop: "8px" }}>
+                      😂 Funny
+                    </span>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: "#FF4458", marginBottom: "8px" }}>
+                      {100 - upvotePercent}%
+                    </span>
+                    <div
+                      style={{
+                        width: "56px",
+                        height: `${Math.max(8, Math.round(100 - upvotePercent))}%`,
+                        maxHeight: "100%",
+                        borderRadius: "12px 12px 6px 6px",
+                        background: "linear-gradient(180deg, #ff8a97 0%, #FF4458 100%)",
+                        transition: "height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                      }}
+                    />
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#FF4458", marginTop: "8px" }}>
+                      Not Funny 💀
+                    </span>
                   </div>
                 </div>
-              ) : (
+              </div>
+            ) : (
                 <div />
               )}
 
