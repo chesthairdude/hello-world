@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../../utils/supabase/server";
-import VoteDeck from "./VoteDeck";
+import VoteWorkspace from "./VoteWorkspace";
 
 export const revalidate = 0;
 
@@ -79,5 +79,5 @@ export default async function VotePage() {
 
   const items = shuffleItems(mappedItems);
 
-  return <VoteDeck initialItems={items} />;
+  return <VoteWorkspace initialItems={items} userEmail={session.user.email ?? ""} />;
 }
