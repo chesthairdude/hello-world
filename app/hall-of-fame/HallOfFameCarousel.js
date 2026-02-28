@@ -74,13 +74,12 @@ export default function HallOfFameCarousel({ items = [] }) {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: "grid",
+        gridTemplateRows: "1fr auto auto",
         alignItems: "center",
-        justifyContent: "center",
         width: "100%",
         maxWidth: "420px",
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 64px)",
         paddingTop: "32px",
         paddingBottom: "32px",
         boxSizing: "border-box",
@@ -145,7 +144,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           </div>
         </div>
 
-        <div style={{ width: "100%", marginTop: "20px", marginBottom: "32px", flexShrink: 0 }}>
+        <div style={{ width: "100%", marginTop: "20px", flexShrink: 0 }}>
           <div
             style={{
               marginBottom: "8px",
@@ -238,110 +237,112 @@ export default function HallOfFameCarousel({ items = [] }) {
               {Math.round(current.ratio * 100)}% funny rate
             </p>
           </div>
-          <div
+        </div>
+
+        <div
+          style={{
+            width: "100%",
+            marginTop: "24px",
+            marginBottom: "32px",
+            display: "flex",
+            gap: "20px",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <button
+            onClick={() => navigate("left")}
+            disabled={animating}
             style={{
-              width: "100%",
-              marginTop: "24px",
+              flexShrink: 0,
+              width: "52px",
+              height: "52px",
+              borderRadius: "50%",
+              border: "1px solid rgba(255,255,255,0.6)",
+              background: "var(--glass-bg)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+              cursor: animating ? "not-allowed" : "pointer",
+              fontSize: "20px",
+              color: "var(--text-primary)",
+              transition: "all 0.2s ease",
               display: "flex",
-              gap: "20px",
               alignItems: "center",
               justifyContent: "center",
-              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => {
+              if (!animating) {
+                e.currentTarget.style.transform = "scale(1.08)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            <button
-              onClick={() => navigate("left")}
-              disabled={animating}
-              style={{
-                flexShrink: 0,
-                width: "52px",
-                height: "52px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.6)",
-                background: "var(--glass-bg)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                cursor: animating ? "not-allowed" : "pointer",
-                fontSize: "20px",
-                color: "var(--text-primary)",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onMouseEnter={(e) => {
-                if (!animating) {
-                  e.currentTarget.style.transform = "scale(1.08)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              ←
-            </button>
+            ←
+          </button>
 
-            <div style={{ display: "flex", gap: "6px" }}>
-              {items.map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: i === index ? "20px" : "6px",
-                    height: "6px",
-                    borderRadius: "999px",
-                    background: i === index ? "#6478ff" : "var(--dot-inactive)",
-                    transition: "all 0.3s ease",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    if (i !== index && !animating) {
-                      setDirection(i > index ? "right" : "left");
-                      setAnimating(true);
-                      setTimeout(() => {
-                        setIndex(i);
-                        setDirection(null);
-                        setAnimating(false);
-                      }, 280);
-                    }
-                  }}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={() => navigate("right")}
-              disabled={animating}
-              style={{
-                flexShrink: 0,
-                width: "52px",
-                height: "52px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.6)",
-                background: "var(--glass-bg)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                cursor: animating ? "not-allowed" : "pointer",
-                fontSize: "20px",
-                color: "var(--text-primary)",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onMouseEnter={(e) => {
-                if (!animating) {
-                  e.currentTarget.style.transform = "scale(1.08)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              →
-            </button>
+          <div style={{ display: "flex", gap: "6px" }}>
+            {items.map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: i === index ? "20px" : "6px",
+                  height: "6px",
+                  borderRadius: "999px",
+                  background: i === index ? "#6478ff" : "var(--dot-inactive)",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  if (i !== index && !animating) {
+                    setDirection(i > index ? "right" : "left");
+                    setAnimating(true);
+                    setTimeout(() => {
+                      setIndex(i);
+                      setDirection(null);
+                      setAnimating(false);
+                    }, 280);
+                  }
+                }}
+              />
+            ))}
           </div>
+
+          <button
+            onClick={() => navigate("right")}
+            disabled={animating}
+            style={{
+              flexShrink: 0,
+              width: "52px",
+              height: "52px",
+              borderRadius: "50%",
+              border: "1px solid rgba(255,255,255,0.6)",
+              background: "var(--glass-bg)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+              cursor: animating ? "not-allowed" : "pointer",
+              fontSize: "20px",
+              color: "var(--text-primary)",
+              transition: "all 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              if (!animating) {
+                e.currentTarget.style.transform = "scale(1.08)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            →
+          </button>
         </div>
     </div>
   );

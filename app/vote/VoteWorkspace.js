@@ -230,6 +230,8 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
         style={{
           marginLeft: "220px",
           minHeight: "100vh",
+          height: mode === "vote" ? "100vh" : "auto",
+          overflow: mode === "vote" ? "hidden" : "visible",
           position: "relative",
           display: "flex",
           alignItems: "center",
