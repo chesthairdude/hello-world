@@ -1,92 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "../../utils/supabase/client";
-
-function friendlyAuthError(message) {
-  const text = String(message || "").toLowerCase();
-  if (text.includes("invalid login")) {
-    return "Email or password is incorrect.";
-  }
-  if (text.includes("email not confirmed")) {
-    return "Please confirm your email before signing in.";
-  }
-  if (text.includes("already registered")) {
-    return "This email is already registered. Try signing in instead.";
-  }
-  if (text.includes("password")) {
-    return "Password must meet the minimum requirements.";
-  }
-  return "Authentication failed. Please try again.";
-}
-
-const baseInputStyle = {
-  width: "100%",
-  padding: "13px 16px",
-  borderRadius: "12px",
-  border: "1px solid var(--input-border)",
-  background: "var(--input-bg)",
-  backdropFilter: "blur(8px)",
-  WebkitBackdropFilter: "blur(8px)",
-  fontSize: "14px",
-  fontWeight: 500,
-  color: "var(--text-primary)",
-  outline: "none",
-  boxSizing: "border-box",
-  fontFamily: "var(--font-geist-sans)",
-  transition: "border 0.2s ease, box-shadow 0.2s ease",
-};
-
 export default function AuthForm() {
-  const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loadingAction, setLoadingAction] = useState("");
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
-
-  async function handleSignIn() {
-    setError("");
-    setNotice("");
-    setLoadingAction("signin");
-
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-
-    if (signInError) {
-      setError(friendlyAuthError(signInError.message));
-      setLoadingAction("");
-      return;
-    }
-
-    router.push("/vote");
-    router.refresh();
-  }
-
-  async function handleSignUp() {
-    setError("");
-    setNotice("");
-    setLoadingAction("signup");
-
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-    });
-
-    if (signUpError) {
-      setError(friendlyAuthError(signUpError.message));
-      setLoadingAction("");
-      return;
-    }
-
-    setNotice("Account created. You can now sign in.");
-    setLoadingAction("");
-  }
-
   return (
     <div
       style={{
@@ -127,32 +41,19 @@ export default function AuthForm() {
         >
           Welcome back
         </h1>
-        <p style={{ fontSize: "14px", color: "var(--text-secondary)", fontWeight: 400 }}>
-          Sign in or create an account to start voting
+        <p
+          style={{
+            fontSize: "14px",
+            color: "var(--text-secondary)",
+            fontWeight: 400,
+          }}
+        >
+          Sign in with Google to start voting
         </p>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
-        <input
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="Email address"
-          style={baseInputStyle}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder="Password"
-          style={baseInputStyle}
-        />
-      </div>
-
-      <button
-        type="button"
-        onClick={handleSignIn}
-        disabled={loadingAction !== ""}
+      <a
+        href="/auth/login"
         style={{
           width: "100%",
           padding: "14px",
@@ -165,77 +66,23 @@ export default function AuthForm() {
           fontSize: "15px",
           fontWeight: 600,
           letterSpacing: "-0.01em",
-          cursor: loadingAction ? "not-allowed" : "pointer",
-          marginBottom: "10px",
+          cursor: "pointer",
           boxShadow: "0 4px 20px rgba(100,120,255,0.3)",
           transition: "all 0.2s ease",
           fontFamily: "var(--font-geist-sans)",
-          opacity: loadingAction ? 0.7 : 1,
+          textDecoration: "none",
+          textAlign: "center",
+          display: "block",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-1px)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
         }}
       >
-        {loadingAction === "signin" ? "Signing in..." : "Sign In"}
-      </button>
-
-      <button
-        type="button"
-        onClick={handleSignUp}
-        disabled={loadingAction !== ""}
-        style={{
-          width: "100%",
-          padding: "14px",
-          borderRadius: "14px",
-          border: "1px solid rgba(180,180,210,0.4)",
-          background: "rgba(255,255,255,0.35)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          color: "#555",
-          fontSize: "15px",
-          fontWeight: 600,
-          letterSpacing: "-0.01em",
-          cursor: loadingAction ? "not-allowed" : "pointer",
-          transition: "all 0.2s ease",
-          fontFamily: "var(--font-geist-sans)",
-          opacity: loadingAction ? 0.7 : 1,
-        }}
-      >
-        {loadingAction === "signup" ? "Creating account..." : "Create Account"}
-      </button>
-
-      {notice ? (
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "12px 16px",
-            borderRadius: "12px",
-            background: "rgba(76,222,128,0.12)",
-            border: "1px solid rgba(76,222,128,0.35)",
-            color: "#2f9a5a",
-            fontSize: "13px",
-            fontWeight: 500,
-            textAlign: "center",
-          }}
-        >
-          {notice}
-        </div>
-      ) : null}
-
-      {error ? (
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "12px 16px",
-            borderRadius: "12px",
-            background: "rgba(255,68,88,0.08)",
-            border: "1px solid rgba(255,68,88,0.25)",
-            color: "#FF4458",
-            fontSize: "13px",
-            fontWeight: 500,
-            textAlign: "center",
-          }}
-        >
-          {error}
-        </div>
-      ) : null}
+        Continue with Google
+      </a>
     </div>
   );
 }

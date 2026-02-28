@@ -57,20 +57,6 @@ export default function HallOfFameCarousel({ items = [] }) {
         maxWidth: "420px",
       }}
     >
-        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-          <span
-            style={{
-              fontSize: "13px",
-              fontWeight: 700,
-              color: "var(--text-secondary)",
-              letterSpacing: "0.04em",
-            }}
-          >
-            #{current.rank} of {items.length}
-          </span>
-          {current.rank === 1 ? <span style={{ fontSize: "18px" }}>👑</span> : null}
-        </div>
-
         <div
           style={{
             width: "100%",
@@ -91,7 +77,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           <div
             style={{
               width: "100%",
-              maxHeight: "320px",
+              maxHeight: "420px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
