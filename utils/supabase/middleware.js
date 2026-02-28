@@ -33,7 +33,8 @@ export async function updateSession(request) {
 
   if (
     (request.nextUrl.pathname.startsWith("/vote") ||
-      request.nextUrl.pathname.startsWith("/hall-of-fame")) &&
+      request.nextUrl.pathname.startsWith("/hall-of-fame") ||
+      request.nextUrl.pathname.startsWith("/upload")) &&
     !user
   ) {
     const url = request.nextUrl.clone();

@@ -5,10 +5,13 @@ import { useState } from "react";
 import VoteDeck from "./VoteDeck";
 import UploadPanel from "./UploadPanel";
 import ThemeToggleButton from "../components/ThemeToggleButton";
+import PageTransition from "../components/PageTransition";
 
 export default function VoteWorkspace({ initialItems = [], userEmail = "", initialMode = "vote" }) {
   const [mode, setMode] = useState(initialMode === "upload" ? "upload" : "vote");
   const [uploadExpanded, setUploadExpanded] = useState(false);
+  const isVoteActive = mode === "vote";
+  const isUploadActive = mode === "upload";
 
   return (
     <main style={{ minHeight: "100vh" }}>
@@ -70,11 +73,12 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
             padding: "10px 14px",
             borderRadius: "12px",
             border: "1px solid var(--glass-border)",
-            backgroundColor: mode === "vote" ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
+            borderLeft: isVoteActive ? "3px solid #6478ff" : "3px solid transparent",
+            backgroundColor: isVoteActive ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             boxShadow:
-              mode === "vote" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)",
+              isVoteActive ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)",
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 500,
@@ -90,9 +94,9 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor =
-              mode === "vote" ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
+              isVoteActive ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
             e.currentTarget.style.boxShadow =
-              mode === "vote" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
+              isVoteActive ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
             e.currentTarget.style.transform = "translateY(0)";
           }}
         >
@@ -109,6 +113,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
             padding: "10px 14px",
             borderRadius: "12px",
             border: "1px solid var(--glass-border)",
+            borderLeft: "3px solid transparent",
             backgroundColor: "var(--nav-item-bg)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
@@ -147,11 +152,12 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
             padding: "10px 14px",
             borderRadius: "12px",
             border: "1px solid var(--glass-border)",
-            backgroundColor: mode === "upload" ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
+            borderLeft: isUploadActive ? "3px solid #6478ff" : "3px solid transparent",
+            backgroundColor: isUploadActive ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             boxShadow:
-              mode === "upload" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)",
+              isUploadActive ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)",
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 500,
@@ -167,9 +173,9 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor =
-              mode === "upload" ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
+              isUploadActive ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
             e.currentTarget.style.boxShadow =
-              mode === "upload" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
+              isUploadActive ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
             e.currentTarget.style.transform = "translateY(0)";
           }}
         >
@@ -187,6 +193,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
               padding: "10px 14px",
               borderRadius: "12px",
               border: "1px solid var(--glass-border)",
+              borderLeft: "3px solid transparent",
               backgroundColor: "var(--nav-item-bg)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
@@ -229,20 +236,22 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           padding: "32px 24px",
         }}
       >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: mode === "vote" ? "400px" : uploadExpanded ? "900px" : "480px",
-            margin: "0 auto",
-            transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          }}
-        >
-          {mode === "vote" ? (
-            <VoteDeck initialItems={initialItems} />
-          ) : (
-            <UploadPanel onResultsChange={setUploadExpanded} />
-          )}
-        </div>
+        <PageTransition>
+          <div
+            style={{
+              width: "100%",
+              maxWidth: mode === "vote" ? "400px" : uploadExpanded ? "900px" : "480px",
+              margin: "0 auto",
+              transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+            {mode === "vote" ? (
+              <VoteDeck initialItems={initialItems} />
+            ) : (
+              <UploadPanel onResultsChange={setUploadExpanded} />
+            )}
+          </div>
+        </PageTransition>
       </section>
     </main>
   );

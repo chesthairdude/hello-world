@@ -29,37 +29,34 @@ export default function HallOfFameCarousel({ items = [] }) {
 
   if (!items.length) {
     return (
-      <div style={{ animation: "pageEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" }}>
-        <div
-          style={{
-            padding: "40px",
-            borderRadius: "20px",
-            background: "var(--glass-bg)",
-            backdropFilter: "blur(32px)",
-            border: "1px solid var(--glass-border)",
-            textAlign: "center",
-            color: "var(--text-secondary)",
-            fontSize: "15px",
-          }}
-        >
-          No captions have reached 70 votes yet. Keep voting! 🗳️
-        </div>
+      <div
+        style={{
+          padding: "40px",
+          borderRadius: "20px",
+          background: "var(--glass-bg)",
+          backdropFilter: "blur(32px)",
+          border: "1px solid var(--glass-border)",
+          textAlign: "center",
+          color: "var(--text-secondary)",
+          fontSize: "15px",
+        }}
+      >
+        No captions have reached 70 votes yet. Keep voting! 🗳️
       </div>
     );
   }
 
   return (
-    <div style={{ animation: "pageEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "24px",
-          width: "100%",
-          maxWidth: "420px",
-        }}
-      >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "24px",
+        width: "100%",
+        maxWidth: "420px",
+      }}
+    >
         <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
           <span
             style={{
@@ -281,7 +278,6 @@ export default function HallOfFameCarousel({ items = [] }) {
             →
           </button>
         </div>
-      </div>
     </div>
   );
 }

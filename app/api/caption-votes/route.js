@@ -31,22 +31,36 @@ export async function POST(request) {
     );
   }
 
+  const { data: captionExists, error: captionLookupError } = await supabase
+    .from("captions")
+    .select("id")
+    .eq("id", captionId)
+    .maybeSingle();
+
+  if (captionLookupError) {
+    return NextResponse.json({ error: "Unable to verify caption" }, { status: 500 });
+  }
+
+  if (!captionExists) {
+    return NextResponse.json({ error: "Caption not found" }, { status: 404 });
+  }
+
   const now = new Date().toISOString();
-  const { error } = await supabase.from("caption_votes").upsert(
+  const { error } = await supabase.from("caption_votes").insert(
     {
       caption_id: captionId,
       profile_id: user.id,
       vote_value: voteValue,
       created_datetime_utc: now,
       modified_datetime_utc: now,
-    },
-    {
-      onConflict: "profile_id,caption_id",
     }
   );
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error.code === "23505") {
+      return NextResponse.json({ error: "Already voted" }, { status: 409 });
+    }
+    return NextResponse.json({ error: "Failed to submit vote" }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

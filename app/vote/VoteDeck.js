@@ -6,6 +6,11 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
+let cachedVoteItems = null;
+
+export function setCachedVoteItems(items) {
+  cachedVoteItems = items;
+}
 
 function getSentimentCategory(funnyPercent) {
   if (funnyPercent >= 75) {
@@ -31,7 +36,7 @@ function calculateFunnyPercent(likeCount, dislikeCount) {
 export default function VoteDeck({ initialItems = [] }) {
   const { isDark } = useTheme();
   const supabase = useMemo(() => createClient(), []);
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState(() => cachedVoteItems ?? initialItems);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [swipeDirection, setSwipeDirection] = useState(null);
@@ -57,6 +62,10 @@ export default function VoteDeck({ initialItems = [] }) {
       : String(current.captionContent);
   const captionText = rawCaptionText.trim();
   const hasVotes = likeCount + dislikeCount > 0;
+
+  useEffect(() => {
+    cachedVoteItems = items;
+  }, [items]);
 
   useEffect(() => {
     setSwipeDirection(null);
@@ -395,7 +404,7 @@ export default function VoteDeck({ initialItems = [] }) {
                     transition: "color 0.3s ease",
                   }}
                 >
-                  {dislikeCount} not funny 💀
+                  {dislikeCount} not funny 😐
                 </span>
               </div>
 

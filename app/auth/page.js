@@ -1,16 +1,17 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../../utils/supabase/server";
 import AuthForm from "./AuthForm";
+import PageTransition from "../components/PageTransition";
 
 export const revalidate = 0;
 
 export default async function AuthPage() {
   const supabase = await createClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (session) {
+  if (user) {
     redirect("/vote");
   }
 
@@ -25,7 +26,9 @@ export default async function AuthPage() {
         fontFamily: "var(--font-geist-sans)",
       }}
     >
-      <AuthForm />
+      <PageTransition>
+        <AuthForm />
+      </PageTransition>
     </main>
   );
 }
