@@ -71,7 +71,9 @@ export default function MyStatsView({
   totalRated,
   upvotes,
   downvotes,
-  imagesUploaded,
+  imageCaptionPairsCreated,
+  uniqueImagesUploaded,
+  ratingPercentile,
   consensusPercent,
   validConsensusVotes,
   email,
@@ -304,38 +306,63 @@ export default function MyStatsView({
               <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "4px" }}>{email}</p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}>
               <StatCard emoji="🗳️" label="Total Rated" value={totalRated} sub="image/caption pairs" />
-              <StatCard emoji="🖼️" label="Images Uploaded" value={imagesUploaded} sub="your submissions" />
               <StatCard
-                emoji="😂"
-                label="Funny Votes"
-                value={upvotes}
-                valueColor="#4CDE80"
-                sub={`${upvotePercent}% of your votes`}
+                emoji="🏅"
+                label="Rating Percentile"
+                value={ratingPercentile !== null ? `${ratingPercentile}th` : "—"}
+                sub={ratingPercentile !== null ? `You rated more than ${Math.max(0, ratingPercentile - 1)}% of voters` : "Not enough data"}
               />
               <StatCard
-                emoji="😐"
-                label="Not Funny"
-                value={downvotes}
-                valueColor="#FF4458"
-                sub={`${100 - upvotePercent}% of your votes`}
+                emoji="🖼️"
+                label="Image/Caption Pairs Created"
+                value={imageCaptionPairsCreated}
+                sub={`from ${uniqueImagesUploaded} image${uniqueImagesUploaded === 1 ? "" : "s"}`}
               />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-            {totalRated > 0 ? (
               <div
                 style={{
                   padding: "16px 20px",
                   borderRadius: "16px",
-                    background: "var(--glass-bg)",
-                    backdropFilter: "blur(32px) saturate(180%)",
-                    WebkitBackdropFilter: "blur(32px) saturate(180%)",
-                    border: "1px solid var(--glass-border)",
-                    boxShadow: "var(--glass-highlight), var(--glass-shadow)",
+                  background: "var(--glass-bg)",
+                  backdropFilter: "blur(32px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(32px) saturate(180%)",
+                  border: "1px solid var(--glass-border)",
+                  boxShadow: "var(--glass-highlight), var(--glass-shadow)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
                   }}
                 >
+                  <div>
+                    <p style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-tertiary)", marginBottom: "6px" }}>
+                      Vote Split
+                    </p>
+                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
+                      {totalRated} total votes
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", gap: "16px" }}>
+                    <div style={{ textAlign: "right" }}>
+                      <p style={{ fontSize: "18px", fontWeight: 700, color: "#4CDE80", margin: 0 }}>{upvotes}</p>
+                      <p style={{ fontSize: "11px", color: "#4CDE80", margin: 0 }}>😂 Funny</p>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <p style={{ fontSize: "18px", fontWeight: 700, color: "#FF4458", margin: 0 }}>{downvotes}</p>
+                      <p style={{ fontSize: "11px", color: "#FF4458", margin: 0 }}>😐 Not Funny</p>
+                    </div>
+                  </div>
+                </div>
+
+                {totalRated > 0 ? (
                 <div
                   style={{
                     display: "flex",
@@ -382,10 +409,22 @@ export default function MyStatsView({
                     </span>
                   </div>
                 </div>
+                ) : (
+                  <div
+                    style={{
+                      height: "140px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "var(--text-tertiary)",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    No vote data yet
+                  </div>
+                )}
               </div>
-            ) : (
-                <div />
-              )}
 
               <div
                 style={{

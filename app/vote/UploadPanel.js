@@ -57,6 +57,7 @@ function toFiveCaptions(records) {
 export default function UploadPanel({ onResultsChange }) {
   const supabase = useMemo(() => createClient(), []);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [currentImageId, setCurrentImageId] = useState("");
   const [isGeneratingCaptions, setIsGeneratingCaptions] = useState(false);
   const [pipelineStatus, setPipelineStatus] = useState("");
   const [pipelineError, setPipelineError] = useState("");
@@ -84,6 +85,73 @@ export default function UploadPanel({ onResultsChange }) {
       URL.revokeObjectURL(objectUrl);
     };
   }, [selectedFile]);
+
+  async function generateMoreCaptions(imageId) {
+    if (!imageId) {
+      setPipelineError("No uploaded image found for generating more captions.");
+      return;
+    }
+
+    setIsGeneratingCaptions(true);
+    setPipelineError("");
+    setPipelineStatus("Generating more captions...");
+
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        throw new Error(sessionError.message || "Failed to read auth session");
+      }
+
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        throw new Error("No access token available. Please sign in again.");
+      }
+
+      const captionsResponse = await fetch(`${API_BASE_URL}/pipeline/generate-captions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageId,
+        }),
+      });
+
+      let captionsResult = [];
+      try {
+        captionsResult = await captionsResponse.json();
+      } catch {
+        captionsResult = [];
+      }
+
+      if (!captionsResponse.ok) {
+        throw new Error(readErrorMessage(captionsResult, "Failed to generate additional captions"));
+      }
+
+      const normalizedCaptions = Array.isArray(captionsResult)
+        ? captionsResult
+        : Array.isArray(captionsResult?.captions)
+          ? captionsResult.captions
+          : [];
+
+      setGeneratedCaptions((previous) => [...normalizedCaptions, ...previous]);
+      setPipelineStatus(
+        normalizedCaptions.length > 0
+          ? `Generated ${normalizedCaptions.length} more caption${normalizedCaptions.length === 1 ? "" : "s"}.`
+          : "No additional captions were returned for this image."
+      );
+    } catch (err) {
+      setPipelineStatus("");
+      setPipelineError(err.message || "Failed to generate additional captions");
+    } finally {
+      setIsGeneratingCaptions(false);
+    }
+  }
 
   async function runCaptionPipeline() {
     if (!selectedFile) {
@@ -189,6 +257,7 @@ export default function UploadPanel({ onResultsChange }) {
       if (!imageId) {
         throw new Error("Image registration response is missing imageId.");
       }
+      setCurrentImageId(imageId);
 
       setPipelineStatus("Generating captions...");
       const captionsResponse = await fetch(`${API_BASE_URL}/pipeline/generate-captions`, {
@@ -325,9 +394,36 @@ export default function UploadPanel({ onResultsChange }) {
 
             <button
               type="button"
+              onClick={() => generateMoreCaptions(currentImageId)}
+              disabled={isGeneratingCaptions || !currentImageId}
+              style={{
+                marginTop: "14px",
+                width: "100%",
+                padding: "12px",
+                borderRadius: "12px",
+                border: "1px solid rgba(100,120,255,0.3)",
+                background:
+                  !isGeneratingCaptions && currentImageId
+                    ? "rgba(100,120,255,0.16)"
+                    : "rgba(200,200,210,0.2)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                color: !isGeneratingCaptions && currentImageId ? "var(--text-primary)" : "var(--text-tertiary)",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: !isGeneratingCaptions && currentImageId ? "pointer" : "not-allowed",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {isGeneratingCaptions ? "Generating More..." : "✨ Generate More Captions"}
+            </button>
+
+            <button
+              type="button"
               onClick={() => {
                 setShowResults(false);
                 setSelectedFile(null);
+                setCurrentImageId("");
                 setGeneratedCaptions([]);
                 setUploadedImageUrl("");
                 setPipelineError("");

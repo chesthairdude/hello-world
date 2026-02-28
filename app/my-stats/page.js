@@ -23,10 +23,20 @@ export default async function MyStatsPage() {
     .from("caption_votes")
     .select("caption_id, vote_value");
 
-  const { count: imagesUploaded } = await supabase
+  const { data: allVoteProfiles } = await supabase
+    .from("caption_votes")
+    .select("profile_id")
+    .not("profile_id", "is", null);
+
+  const { data: createdCaptions } = await supabase
     .from("captions")
-    .select("id", { count: "exact", head: true })
+    .select("id, image_id")
     .eq("profile_id", user.id);
+
+  const imageCaptionPairsCreated = createdCaptions?.length ?? 0;
+  const uniqueImagesUploaded = new Set(
+    (createdCaptions ?? []).map((caption) => caption?.image_id).filter(Boolean)
+  ).size;
 
   const totalRated = myVotes?.length ?? 0;
   const upvotes = myVotes?.filter((vote) => vote.vote_value === 1).length ?? 0;
@@ -66,12 +76,27 @@ export default async function MyStatsPage() {
   const consensusPercent =
     validConsensusVotes > 0 ? Math.round((agreedWithConsensus / validConsensusVotes) * 100) : null;
 
+  const ratingCountsByProfile = {};
+  for (const vote of allVoteProfiles ?? []) {
+    if (!vote?.profile_id) {
+      continue;
+    }
+    ratingCountsByProfile[vote.profile_id] = (ratingCountsByProfile[vote.profile_id] ?? 0) + 1;
+  }
+  const allUserRatingCounts = Object.values(ratingCountsByProfile);
+  const ratingPercentile =
+    allUserRatingCounts.length > 0
+      ? Math.round((allUserRatingCounts.filter((count) => count <= totalRated).length / allUserRatingCounts.length) * 100)
+      : null;
+
   return (
     <MyStatsView
       totalRated={totalRated}
       upvotes={upvotes}
       downvotes={downvotes}
-      imagesUploaded={imagesUploaded ?? 0}
+      imageCaptionPairsCreated={imageCaptionPairsCreated}
+      uniqueImagesUploaded={uniqueImagesUploaded}
+      ratingPercentile={ratingPercentile}
       consensusPercent={consensusPercent}
       validConsensusVotes={validConsensusVotes}
       email={user.email ?? ""}
