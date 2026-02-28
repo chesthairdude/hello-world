@@ -37,6 +37,12 @@ export default async function HallOfFamePage() {
     }
   }
 
+  const voteTotals = Object.values(tally).map((counts) => counts.likes + counts.dislikes);
+  const averageVotesPerImage =
+    voteTotals.length > 0
+      ? voteTotals.reduce((sum, total) => sum + total, 0) / voteTotals.length
+      : 0;
+
   const qualified = Object.entries(tally)
     .map(([captionId, counts]) => ({
       captionId,
@@ -45,7 +51,7 @@ export default async function HallOfFamePage() {
       total: counts.likes + counts.dislikes,
       ratio: counts.likes / (counts.likes + counts.dislikes),
     }))
-    .filter((entry) => entry.total >= 70)
+    .filter((entry) => entry.total >= averageVotesPerImage)
     .sort((a, b) => b.ratio - a.ratio || b.total - a.total)
     .slice(0, 20);
 
@@ -263,7 +269,7 @@ export default async function HallOfFamePage() {
             The Funniest of All Time
           </h1>
           <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "8px" }}>
-            Top 20 by community vote · minimum 70 votes
+            Top 20 by community vote · minimum avg votes/image ({averageVotesPerImage.toFixed(1)})
           </p>
         </div>
         <HallOfFameCarousel items={ranked} />

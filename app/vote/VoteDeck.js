@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "../../utils/supabase/client";
+import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
@@ -28,6 +29,7 @@ function calculateFunnyPercent(likeCount, dislikeCount) {
 }
 
 export default function VoteDeck({ initialItems = [] }) {
+  const { isDark } = useTheme();
   const supabase = useMemo(() => createClient(), []);
   const [items, setItems] = useState(initialItems);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -298,22 +300,46 @@ export default function VoteDeck({ initialItems = [] }) {
                 zIndex: 10,
               }}
             />
-              <div className="h-[480px] w-full">
-              {current.imageUrl ? (
-                <img
-                  src={current.imageUrl}
-                  alt="Caption candidate"
-                  className="h-[60%] w-full rounded-t-[20px] object-cover"
-                />
-              ) : (
-                <div
-                  className="flex h-[60%] w-full items-center justify-center rounded-t-[20px] text-sm"
-                  style={{ background: "var(--stats-bg)", color: "var(--text-secondary)" }}
-                >
-                  Missing image
-                </div>
-              )}
-                <div className="flex h-[40%] items-center justify-center px-8 pb-6 pt-6">
+              <div className="w-full">
+                {current.imageUrl ? (
+                  <div
+                    style={{
+                      width: "100%",
+                      maxHeight: "420px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                      borderRadius: "20px 20px 0 0",
+                      backgroundColor: "var(--card-bg)",
+                    }}
+                  >
+                    <img
+                      src={current.imageUrl}
+                      alt="Caption candidate"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        objectPosition: "center",
+                        backgroundColor: "var(--card-bg)",
+                        borderRadius: "20px 20px 0 0",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="flex w-full items-center justify-center rounded-t-[20px] text-sm"
+                    style={{
+                      minHeight: "320px",
+                      background: "var(--stats-bg)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    Missing image
+                  </div>
+                )}
+                <div className="flex items-center justify-center px-8 pb-6 pt-6">
                   <p
                     style={{
                       textAlign: "center",
@@ -443,11 +469,11 @@ export default function VoteDeck({ initialItems = [] }) {
                 height: "80px",
                 borderRadius: "50%",
                 border: "2.5px solid #FF4458",
-                backgroundColor: "rgba(255,255,255,0.7)",
+                backgroundColor: isDark ? "#FF4458" : "rgba(255,255,255,0.7)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
                 fontSize: "28px",
-                color: "#FF4458",
+                color: isDark ? "#fff" : "#FF4458",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -457,13 +483,13 @@ export default function VoteDeck({ initialItems = [] }) {
                 opacity: isSubmitting ? 0.6 : 1,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#FF4458";
-                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#FF4458";
+                e.currentTarget.style.color = isDark ? "#FF4458" : "#fff";
                 e.currentTarget.style.transform = "scale(1.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.color = "#FF4458";
+                e.currentTarget.style.backgroundColor = isDark ? "#FF4458" : "rgba(255,255,255,0.7)";
+                e.currentTarget.style.color = isDark ? "#fff" : "#FF4458";
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -479,11 +505,11 @@ export default function VoteDeck({ initialItems = [] }) {
                 height: "80px",
                 borderRadius: "50%",
                 border: "2.5px solid #4CDE80",
-                backgroundColor: "rgba(255,255,255,0.7)",
+                backgroundColor: isDark ? "#4CDE80" : "rgba(255,255,255,0.7)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
                 fontSize: "28px",
-                color: "#4CDE80",
+                color: isDark ? "#fff" : "#4CDE80",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -493,13 +519,13 @@ export default function VoteDeck({ initialItems = [] }) {
                 opacity: isSubmitting ? 0.6 : 1,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#4CDE80";
-                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#4CDE80";
+                e.currentTarget.style.color = isDark ? "#4CDE80" : "#fff";
                 e.currentTarget.style.transform = "scale(1.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.color = "#4CDE80";
+                e.currentTarget.style.backgroundColor = isDark ? "#4CDE80" : "rgba(255,255,255,0.7)";
+                e.currentTarget.style.color = isDark ? "#fff" : "#4CDE80";
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
