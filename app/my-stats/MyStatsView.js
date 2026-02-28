@@ -337,7 +337,7 @@ export default function MyStatsView({
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     justifyContent: "space-between",
                     marginBottom: "10px",
                   }}
@@ -350,19 +350,10 @@ export default function MyStatsView({
                       {totalRated} total votes
                     </p>
                   </div>
-                  <div style={{ display: "flex", gap: "16px" }}>
-                    <div style={{ textAlign: "right" }}>
-                      <p style={{ fontSize: "18px", fontWeight: 700, color: "#4CDE80", margin: 0 }}>{upvotes}</p>
-                      <p style={{ fontSize: "11px", color: "#4CDE80", margin: 0 }}>😂 Funny</p>
-                    </div>
-                    <div style={{ textAlign: "right" }}>
-                      <p style={{ fontSize: "18px", fontWeight: 700, color: "#FF4458", margin: 0 }}>{downvotes}</p>
-                      <p style={{ fontSize: "11px", color: "#FF4458", margin: 0 }}>😐 Not Funny</p>
-                    </div>
-                  </div>
                 </div>
 
                 {totalRated > 0 ? (
+                <>
                 <div
                   style={{
                     display: "flex",
@@ -409,6 +400,17 @@ export default function MyStatsView({
                     </span>
                   </div>
                 </div>
+                <div style={{ display: "flex", justifyContent: "center", gap: "28px", marginTop: "10px" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: "20px", fontWeight: 700, color: "#4CDE80", margin: 0 }}>{upvotes}</p>
+                    <p style={{ fontSize: "11px", color: "#4CDE80", margin: 0 }}>😂 Funny votes</p>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: "20px", fontWeight: 700, color: "#FF4458", margin: 0 }}>{downvotes}</p>
+                    <p style={{ fontSize: "11px", color: "#FF4458", margin: 0 }}>😐 Not Funny votes</p>
+                  </div>
+                </div>
+                </>
                 ) : (
                   <div
                     style={{
