@@ -339,11 +339,13 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
         style={{
           marginLeft: "220px",
           minHeight: "100vh",
+          height: "100vh",
+          overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "40px 32px",
+          padding: "24px 24px",
           background: "var(--bg-gradient)",
           fontFamily: "var(--font-geist-sans)",
         }}
@@ -356,13 +358,12 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              minHeight: "calc(100vh - 80px)",
             }}
           >
-            <div style={{ marginBottom: "10px", textAlign: "center" }}>
+            <div style={{ marginBottom: "6px", textAlign: "center" }}>
               <h1
                 style={{
-                  fontSize: "28px",
+                  fontSize: "26px",
                   fontWeight: 700,
                   letterSpacing: "-0.03em",
                   color: "var(--text-primary)",

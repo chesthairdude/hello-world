@@ -79,9 +79,9 @@ export default function HallOfFameCarousel({ items = [] }) {
         alignItems: "center",
         width: "100%",
         maxWidth: "420px",
-        minHeight: "calc(100vh - 64px)",
-        paddingTop: "32px",
-        paddingBottom: "32px",
+        minHeight: "calc(100vh - 150px)",
+        paddingTop: "16px",
+        paddingBottom: "12px",
         boxSizing: "border-box",
       }}
     >
@@ -144,7 +144,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           </div>
         </div>
 
-        <div style={{ width: "100%", marginTop: "20px", flexShrink: 0 }}>
+        <div style={{ width: "100%", marginTop: "12px", flexShrink: 0 }}>
           <div
             style={{
               marginBottom: "8px",
@@ -242,8 +242,8 @@ export default function HallOfFameCarousel({ items = [] }) {
         <div
           style={{
             width: "100%",
-            marginTop: "24px",
-            marginBottom: "32px",
+            marginTop: "16px",
+            marginBottom: "8px",
             display: "flex",
             gap: "20px",
             alignItems: "center",
