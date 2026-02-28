@@ -77,16 +77,14 @@ export default function HallOfFameCarousel({ items = [] }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        gap: "24px",
         width: "100%",
         maxWidth: "420px",
-        minHeight: "740px",
       }}
     >
         <div
           style={{
             width: "100%",
-            display: "flex",
-            flexDirection: "column",
             borderRadius: "20px",
             background: "var(--card-bg)",
             border: "1px solid var(--card-border)",
@@ -104,7 +102,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           <div
             style={{
               width: "100%",
-              height: "420px",
+              maxHeight: "420px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -117,8 +115,8 @@ export default function HallOfFameCarousel({ items = [] }) {
               src={current.imageUrl}
               alt="Hall of fame"
               style={{
-                maxWidth: "100%",
-                maxHeight: "100%",
+                width: "100%",
+                height: "100%",
                 objectFit: "contain",
                 objectPosition: "center",
                 backgroundColor: "var(--card-bg)",
@@ -135,11 +133,6 @@ export default function HallOfFameCarousel({ items = [] }) {
                 fontWeight: 600,
                 color: "var(--text-primary)",
                 lineHeight: 1.5,
-                minHeight: "76px",
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                WebkitLineClamp: 3,
-                overflow: "hidden",
                 marginBottom: 0,
               }}
             >
@@ -148,7 +141,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           </div>
         </div>
 
-        <div style={{ marginTop: "16px", width: "100%" }}>
+        <div style={{ marginTop: "4px", width: "100%" }}>
           <div
             style={{
               marginBottom: "8px",
@@ -243,7 +236,7 @@ export default function HallOfFameCarousel({ items = [] }) {
           </div>
         </div>
 
-        <div style={{ marginTop: "auto", paddingTop: "24px", display: "flex", gap: "20px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <button
             onClick={() => navigate("left")}
             disabled={animating}

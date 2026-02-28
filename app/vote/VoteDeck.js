@@ -6,7 +6,7 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-const SWIPE_THRESHOLD = 60;
+const SWIPE_THRESHOLD = 15;
 let cachedVoteItems = null;
 
 export function setCachedVoteItems(items) {
@@ -544,38 +544,30 @@ export default function VoteDeck({ initialItems = [] }) {
         </div>
       ) : (
         <>
-          <div
+          <article
+            ref={cardRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleCardMouseMove}
+            onMouseLeave={handleCardMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="vote-card swipe-card relative overflow-hidden"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              minHeight: "820px",
+              touchAction: "none",
+              cursor: dragRef.current.dragging ? "grabbing" : "grab",
+              userSelect: "none",
+              opacity: swipeDirection ? 0 : undefined,
+              transform:
+                swipeDirection === "left"
+                  ? "translateX(-120%) rotate(-20deg)"
+                  : swipeDirection === "right"
+                    ? "translateX(120%) rotate(20deg)"
+                    : undefined,
+              transition: swipeDirection ? "transform 0.32s ease, opacity 0.32s ease" : undefined,
+              transformStyle: "preserve-3d",
             }}
           >
-            <article
-              ref={cardRef}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleCardMouseMove}
-              onMouseLeave={handleCardMouseLeave}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              className="vote-card swipe-card relative overflow-hidden"
-              style={{
-                touchAction: "none",
-                cursor: dragRef.current.dragging ? "grabbing" : "grab",
-                userSelect: "none",
-                opacity: swipeDirection ? 0 : undefined,
-                transform:
-                  swipeDirection === "left"
-                    ? "translateX(-120%) rotate(-20deg)"
-                    : swipeDirection === "right"
-                      ? "translateX(120%) rotate(20deg)"
-                      : undefined,
-                transition: swipeDirection ? "transform 0.32s ease, opacity 0.32s ease" : undefined,
-                transformStyle: "preserve-3d",
-              }}
-            >
             <div
               ref={overlayRef}
               style={{
@@ -704,7 +696,7 @@ export default function VoteDeck({ initialItems = [] }) {
               </div>
             </article>
 
-            <div style={{ marginTop: "28px", width: "100%" }}>
+          <div style={{ marginTop: "28px", width: "100%" }}>
             <div
               style={{
                 marginBottom: "8px",
@@ -806,90 +798,88 @@ export default function VoteDeck({ initialItems = [] }) {
             </div>
           </div>
 
-            <div
+          <div
+            style={{
+              paddingTop: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "60px",
+              width: "100%",
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => submitVote(-1, "left")}
+              disabled={isSubmitting}
+              aria-label="Dislike"
               style={{
-                marginTop: "auto",
-                paddingTop: "44px",
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                border: "2.5px solid #FF4458",
+                backgroundColor: isDark ? "#FF4458" : "rgba(255,255,255,0.7)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                fontSize: "28px",
+                color: isDark ? "#fff" : "#FF4458",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "60px",
-                width: "100%",
+                transition: "all 0.2s ease",
+                boxShadow: "0 4px 16px rgba(255,68,88,0.2)",
+                opacity: isSubmitting ? 0.6 : 1,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#FF4458";
+                e.currentTarget.style.color = isDark ? "#FF4458" : "#fff";
+                e.currentTarget.style.transform = "scale(1.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "#FF4458" : "rgba(255,255,255,0.7)";
+                e.currentTarget.style.color = isDark ? "#fff" : "#FF4458";
+                e.currentTarget.style.transform = "scale(1)";
               }}
             >
-              <button
-                type="button"
-                onClick={() => submitVote(-1, "left")}
-                disabled={isSubmitting}
-                aria-label="Dislike"
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "50%",
-                  border: "2.5px solid #FF4458",
-                  backgroundColor: isDark ? "#FF4458" : "rgba(255,255,255,0.7)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  fontSize: "28px",
-                  color: isDark ? "#fff" : "#FF4458",
-                  cursor: isSubmitting ? "not-allowed" : "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.2s ease",
-                  boxShadow: "0 4px 16px rgba(255,68,88,0.2)",
-                  opacity: isSubmitting ? 0.6 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#FF4458";
-                  e.currentTarget.style.color = isDark ? "#FF4458" : "#fff";
-                  e.currentTarget.style.transform = "scale(1.12)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "#FF4458" : "rgba(255,255,255,0.7)";
-                  e.currentTarget.style.color = isDark ? "#fff" : "#FF4458";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
-              >
-                ✕
-              </button>
-              <button
-                type="button"
-                onClick={() => submitVote(1, "right")}
-                disabled={isSubmitting}
-                aria-label="Like"
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "50%",
-                  border: "2.5px solid #4CDE80",
-                  backgroundColor: isDark ? "#4CDE80" : "rgba(255,255,255,0.7)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  fontSize: "28px",
-                  color: isDark ? "#fff" : "#4CDE80",
-                  cursor: isSubmitting ? "not-allowed" : "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.2s ease",
-                  boxShadow: "0 4px 16px rgba(76,222,128,0.2)",
-                  opacity: isSubmitting ? 0.6 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#4CDE80";
-                  e.currentTarget.style.color = isDark ? "#4CDE80" : "#fff";
-                  e.currentTarget.style.transform = "scale(1.12)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? "#4CDE80" : "rgba(255,255,255,0.7)";
-                  e.currentTarget.style.color = isDark ? "#fff" : "#4CDE80";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
-              >
-                ✓
-              </button>
-            </div>
+              ✕
+            </button>
+            <button
+              type="button"
+              onClick={() => submitVote(1, "right")}
+              disabled={isSubmitting}
+              aria-label="Like"
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                border: "2.5px solid #4CDE80",
+                backgroundColor: isDark ? "#4CDE80" : "rgba(255,255,255,0.7)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                fontSize: "28px",
+                color: isDark ? "#fff" : "#4CDE80",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
+                boxShadow: "0 4px 16px rgba(76,222,128,0.2)",
+                opacity: isSubmitting ? 0.6 : 1,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "rgba(255,255,255,0.18)" : "#4CDE80";
+                e.currentTarget.style.color = isDark ? "#4CDE80" : "#fff";
+                e.currentTarget.style.transform = "scale(1.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = isDark ? "#4CDE80" : "rgba(255,255,255,0.7)";
+                e.currentTarget.style.color = isDark ? "#fff" : "#4CDE80";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
+              ✓
+            </button>
           </div>
         </>
       )}
