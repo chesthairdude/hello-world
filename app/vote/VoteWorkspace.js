@@ -234,7 +234,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "32px 24px",
+          padding: "32px 24px 160px",
         }}
       >
         {mode === "vote" ? (

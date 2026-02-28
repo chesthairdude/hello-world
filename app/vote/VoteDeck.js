@@ -6,7 +6,7 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-const SWIPE_THRESHOLD = 15;
+const SWIPE_THRESHOLD = 60;
 let cachedVoteItems = null;
 
 export function setCachedVoteItems(items) {
@@ -800,12 +800,16 @@ export default function VoteDeck({ initialItems = [] }) {
 
           <div
             style={{
-              paddingTop: "44px",
+              position: "fixed",
+              bottom: "32px",
+              left: "220px",
+              right: 0,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "60px",
-              width: "100%",
+              zIndex: 50,
+              pointerEvents: "none",
             }}
           >
             <button
@@ -814,6 +818,7 @@ export default function VoteDeck({ initialItems = [] }) {
               disabled={isSubmitting}
               aria-label="Dislike"
               style={{
+                pointerEvents: "all",
                 width: "80px",
                 height: "80px",
                 borderRadius: "50%",
@@ -850,6 +855,7 @@ export default function VoteDeck({ initialItems = [] }) {
               disabled={isSubmitting}
               aria-label="Like"
               style={{
+                pointerEvents: "all",
                 width: "80px",
                 height: "80px",
                 borderRadius: "50%",

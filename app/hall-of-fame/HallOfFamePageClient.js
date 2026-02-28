@@ -343,7 +343,7 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "40px 32px",
+          padding: "40px 32px 160px",
           background: "var(--bg-gradient)",
           fontFamily: "var(--font-geist-sans)",
         }}
