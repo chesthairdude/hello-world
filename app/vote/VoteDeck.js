@@ -430,7 +430,7 @@ export default function VoteDeck({ initialItems = [] }) {
                     height: "14px",
                     width: "100%",
                     borderRadius: "999px",
-                    background: "rgba(255, 255, 255, 0.18)",
+                    background: "rgba(255, 68, 88, 0.75)",
                     backdropFilter: "blur(16px) saturate(180%)",
                     WebkitBackdropFilter: "blur(16px) saturate(180%)",
                     border: "1px solid rgba(255, 255, 255, 0.55)",
@@ -446,9 +446,7 @@ export default function VoteDeck({ initialItems = [] }) {
                       left: 0,
                       height: "100%",
                       width: `${funnyPercent}%`,
-                      background:
-                        "linear-gradient(90deg, #4CDE80 0%, #a8ff78 35%, #ffdd57 60%, #FF6B6B 85%, #FF4458 100%)",
-                      backgroundSize: "400px 100%",
+                      background: "#4CDE80",
                       borderRadius: "999px",
                       transition: meterAnimated ? METER_TRANSITION : "none",
                     }}
@@ -470,23 +468,6 @@ export default function VoteDeck({ initialItems = [] }) {
                 </div>
               )}
             </div>
-            <p
-              style={{
-                marginTop: "8px",
-                textAlign: "center",
-                fontSize: "13px",
-                fontWeight: 600,
-                color: hasVotes ? "#444" : "#bbb",
-                letterSpacing: "-0.01em",
-                opacity: sentimentVisible ? 1 : 0,
-                transform: sentimentVisible
-                  ? "scale(1) translateY(0)"
-                  : "scale(0.88) translateY(2px)",
-                transition: "opacity 0.2s ease, transform 0.2s ease",
-              }}
-            >
-              {hasVotes ? sentiment.label : "— no votes yet —"}
-            </p>
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-[60px]">

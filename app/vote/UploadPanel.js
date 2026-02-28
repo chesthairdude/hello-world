@@ -45,7 +45,7 @@ function getCaptionText(record) {
   return "";
 }
 
-export default function UploadPanel() {
+export default function UploadPanel({ onResultsChange }) {
   const supabase = useMemo(() => createClient(), []);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isGeneratingCaptions, setIsGeneratingCaptions] = useState(false);
@@ -55,6 +55,12 @@ export default function UploadPanel() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [localPreviewUrl, setLocalPreviewUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof onResultsChange === "function") {
+      onResultsChange(showResults);
+    }
+  }, [onResultsChange, showResults]);
 
   useEffect(() => {
     if (!selectedFile) {

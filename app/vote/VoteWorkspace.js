@@ -6,6 +6,7 @@ import UploadPanel from "./UploadPanel";
 
 export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
   const [mode, setMode] = useState("vote");
+  const [uploadExpanded, setUploadExpanded] = useState(false);
 
   return (
     <main style={{ minHeight: "100vh" }}>
@@ -41,7 +42,10 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
 
         <button
           type="button"
-          onClick={() => setMode("vote")}
+          onClick={() => {
+            setMode("vote");
+            setUploadExpanded(false);
+          }}
           style={{
             display: "flex",
             alignItems: "center",
@@ -172,12 +176,16 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
         <div
           style={{
             width: "100%",
-            maxWidth: mode === "vote" ? "400px" : "900px",
+            maxWidth: mode === "vote" ? "400px" : uploadExpanded ? "900px" : "480px",
             margin: "0 auto",
             transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
         >
-          {mode === "vote" ? <VoteDeck initialItems={initialItems} /> : <UploadPanel />}
+          {mode === "vote" ? (
+            <VoteDeck initialItems={initialItems} />
+          ) : (
+            <UploadPanel onResultsChange={setUploadExpanded} />
+          )}
         </div>
       </section>
     </main>
