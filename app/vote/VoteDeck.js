@@ -6,7 +6,7 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-const SWIPE_THRESHOLD = 60;
+const SWIPE_THRESHOLD = 30;
 let cachedVoteItems = null;
 
 export function setCachedVoteItems(items) {
@@ -45,8 +45,11 @@ export default function VoteDeck({ initialItems = [] }) {
   const sentimentTimerRef = useRef(null);
   const likeCountRef = useRef(0);
   const dislikeCountRef = useRef(0);
-  const dragRef = useRef({ dragging: false, startX: 0, currentX: 0 });
+  const dragRef = useRef({ dragging: false, startX: 0, currentX: 0, offset: 0 });
   const cardRef = useRef(null);
+  const overlayRef = useRef(null);
+  const funnyStampRef = useRef(null);
+  const nopeStampRef = useRef(null);
 
   const [likeCount, setLikeCount] = useState(0);
   const [dislikeCount, setDislikeCount] = useState(0);
@@ -57,8 +60,6 @@ export default function VoteDeck({ initialItems = [] }) {
   const [mouseY, setMouseY] = useState(50);
   const [tiltX, setTiltX] = useState(0);
   const [tiltY, setTiltY] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-
   const current = useMemo(() => items[0] ?? null, [items]);
   const rawCaptionText =
     current?.captionContent === null || current?.captionContent === undefined
@@ -73,8 +74,16 @@ export default function VoteDeck({ initialItems = [] }) {
 
   useEffect(() => {
     setSwipeDirection(null);
-    dragRef.current = { dragging: false, startX: 0, currentX: 0 };
-    setDragOffset(0);
+    dragRef.current = { dragging: false, startX: 0, currentX: 0, offset: 0 };
+    if (overlayRef.current) {
+      overlayRef.current.style.background = "transparent";
+    }
+    if (funnyStampRef.current) {
+      funnyStampRef.current.style.opacity = "0";
+    }
+    if (nopeStampRef.current) {
+      nopeStampRef.current.style.opacity = "0";
+    }
   }, [current?.captionId]);
 
   useEffect(() => {
@@ -227,7 +236,7 @@ export default function VoteDeck({ initialItems = [] }) {
     isSubmittingRef.current = true;
     setIsSubmitting(true);
     setError("");
-    setDragOffset(0);
+    dragRef.current.offset = 0;
     setSwipeDirection(direction);
 
     try {
@@ -274,7 +283,7 @@ export default function VoteDeck({ initialItems = [] }) {
 
       setItems((previous) => previous.slice(1));
     } catch (err) {
-      setDragOffset(0);
+      dragRef.current.offset = 0;
       setSwipeDirection(null);
       setError(err.message || "Failed to submit vote");
     } finally {
@@ -306,9 +315,20 @@ export default function VoteDeck({ initialItems = [] }) {
     if (dragRef.current.dragging) {
       dragRef.current.dragging = false;
       if (cardRef.current) {
-        cardRef.current.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+        cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
+        cardRef.current.style.transform = "translateX(0)";
+        cardRef.current.style.willChange = "auto";
       }
-      setDragOffset(0);
+      dragRef.current.offset = 0;
+      if (overlayRef.current) {
+        overlayRef.current.style.background = "transparent";
+      }
+      if (funnyStampRef.current) {
+        funnyStampRef.current.style.opacity = "0";
+      }
+      if (nopeStampRef.current) {
+        nopeStampRef.current.style.opacity = "0";
+      }
     }
     setTiltX(0);
     setTiltY(0);
@@ -324,7 +344,55 @@ export default function VoteDeck({ initialItems = [] }) {
       cardRef.current.style.transition = "none";
       cardRef.current.style.willChange = "transform";
     }
-    dragRef.current = { dragging: true, startX: event.clientX, currentX: event.clientX };
+    dragRef.current = { dragging: true, startX: event.clientX, currentX: event.clientX, offset: 0 };
+  }
+
+  function updateDragFeedback(offset) {
+    if (!overlayRef.current || !funnyStampRef.current || !nopeStampRef.current) {
+      return;
+    }
+
+    if (offset > 50) {
+      overlayRef.current.style.background = `rgba(76, 222, 128, ${Math.min((offset - 50) / 150, 0.35)})`;
+      funnyStampRef.current.style.opacity = String(Math.min((offset - 50) / 100, 1));
+      nopeStampRef.current.style.opacity = "0";
+      return;
+    }
+
+    if (offset < -50) {
+      overlayRef.current.style.background = `rgba(255, 68, 88, ${Math.min((-offset - 50) / 150, 0.35)})`;
+      nopeStampRef.current.style.opacity = String(Math.min((-offset - 50) / 100, 1));
+      funnyStampRef.current.style.opacity = "0";
+      return;
+    }
+
+    overlayRef.current.style.background = "transparent";
+    funnyStampRef.current.style.opacity = "0";
+    nopeStampRef.current.style.opacity = "0";
+  }
+
+  function setSwipeFeedback(direction) {
+    if (!overlayRef.current || !funnyStampRef.current || !nopeStampRef.current) {
+      return;
+    }
+
+    if (direction === "right") {
+      overlayRef.current.style.background = "rgba(76, 222, 128, 0.25)";
+      funnyStampRef.current.style.opacity = "1";
+      nopeStampRef.current.style.opacity = "0";
+      return;
+    }
+
+    if (direction === "left") {
+      overlayRef.current.style.background = "rgba(255, 68, 88, 0.25)";
+      nopeStampRef.current.style.opacity = "1";
+      funnyStampRef.current.style.opacity = "0";
+      return;
+    }
+
+    overlayRef.current.style.background = "transparent";
+    funnyStampRef.current.style.opacity = "0";
+    nopeStampRef.current.style.opacity = "0";
   }
 
   function handleWindowMouseMove(event) {
@@ -333,7 +401,11 @@ export default function VoteDeck({ initialItems = [] }) {
     }
     dragRef.current.currentX = event.clientX;
     const offset = event.clientX - dragRef.current.startX;
-    setDragOffset(offset);
+    dragRef.current.offset = offset;
+    if (cardRef.current) {
+      cardRef.current.style.transform = `translateX(${offset}px)`;
+    }
+    updateDragFeedback(offset);
   }
 
   function handleWindowMouseUp() {
@@ -342,7 +414,7 @@ export default function VoteDeck({ initialItems = [] }) {
     }
     dragRef.current.dragging = false;
 
-    const offset = dragRef.current.currentX - dragRef.current.startX;
+    const offset = dragRef.current.offset;
 
     if (cardRef.current) {
       cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
@@ -350,17 +422,29 @@ export default function VoteDeck({ initialItems = [] }) {
     }
 
     if (offset > SWIPE_THRESHOLD) {
-      setDragOffset(0);
+      dragRef.current.offset = 0;
       submitVote(1, "right");
       return;
     }
     if (offset < -SWIPE_THRESHOLD) {
-      setDragOffset(0);
+      dragRef.current.offset = 0;
       submitVote(-1, "left");
       return;
     }
 
-    setDragOffset(0);
+    if (cardRef.current) {
+      cardRef.current.style.transform = "translateX(0)";
+    }
+    if (overlayRef.current) {
+      overlayRef.current.style.background = "transparent";
+    }
+    if (funnyStampRef.current) {
+      funnyStampRef.current.style.opacity = "0";
+    }
+    if (nopeStampRef.current) {
+      nopeStampRef.current.style.opacity = "0";
+    }
+    dragRef.current.offset = 0;
   }
 
   function handleWindowMouseLeave() {
@@ -370,9 +454,19 @@ export default function VoteDeck({ initialItems = [] }) {
     dragRef.current.dragging = false;
     if (cardRef.current) {
       cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      cardRef.current.style.transform = "translateX(0)";
       cardRef.current.style.willChange = "auto";
     }
-    setDragOffset(0);
+    if (overlayRef.current) {
+      overlayRef.current.style.background = "transparent";
+    }
+    if (funnyStampRef.current) {
+      funnyStampRef.current.style.opacity = "0";
+    }
+    if (nopeStampRef.current) {
+      nopeStampRef.current.style.opacity = "0";
+    }
+    dragRef.current.offset = 0;
   }
 
   function handleTouchStart(event) {
@@ -387,7 +481,7 @@ export default function VoteDeck({ initialItems = [] }) {
       cardRef.current.style.transition = "none";
       cardRef.current.style.willChange = "transform";
     }
-    dragRef.current = { dragging: true, startX: point.clientX, currentX: point.clientX };
+    dragRef.current = { dragging: true, startX: point.clientX, currentX: point.clientX, offset: 0 };
   }
 
   function handleTouchMove(event) {
@@ -400,7 +494,11 @@ export default function VoteDeck({ initialItems = [] }) {
     }
     dragRef.current.currentX = point.clientX;
     const offset = point.clientX - dragRef.current.startX;
-    setDragOffset(offset);
+    dragRef.current.offset = offset;
+    if (cardRef.current) {
+      cardRef.current.style.transform = `translateX(${offset}px)`;
+    }
+    updateDragFeedback(offset);
   }
 
   function handleTouchEnd() {
@@ -417,6 +515,13 @@ export default function VoteDeck({ initialItems = [] }) {
       window.removeEventListener("mouseleave", handleWindowMouseLeave);
     };
   }, [current, isSubmitting, swipeDirection]);
+
+  useEffect(() => {
+    if (dragRef.current.dragging) {
+      return;
+    }
+    setSwipeFeedback(swipeDirection);
+  }, [swipeDirection]);
 
   return (
     <section className="mx-auto w-full max-w-[400px]">
@@ -440,6 +545,7 @@ export default function VoteDeck({ initialItems = [] }) {
             onTouchEnd={handleTouchEnd}
             className="vote-card swipe-card relative overflow-hidden"
             style={{
+              touchAction: "none",
               cursor: dragRef.current.dragging ? "grabbing" : "grab",
               userSelect: "none",
               opacity: swipeDirection ? 0 : 1,
@@ -448,7 +554,7 @@ export default function VoteDeck({ initialItems = [] }) {
                   ? "translateX(-120%) rotate(-20deg)"
                   : swipeDirection === "right"
                     ? "translateX(120%) rotate(20deg)"
-                    : `translateX(${dragOffset}px) rotate(${dragOffset * 0.02}deg) perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`,
+                    : `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`,
               transition: swipeDirection
                 ? "transform 0.32s ease, opacity 0.32s ease"
                 : dragRef.current.dragging
@@ -458,6 +564,7 @@ export default function VoteDeck({ initialItems = [] }) {
             }}
           >
             <div
+              ref={overlayRef}
               style={{
                 position: "absolute",
                 inset: 0,
@@ -465,12 +572,7 @@ export default function VoteDeck({ initialItems = [] }) {
                 pointerEvents: "none",
                 zIndex: 9,
                 transition: "background 0.1s ease",
-                background:
-                  dragOffset > 50
-                    ? `rgba(76, 222, 128, ${Math.min((dragOffset - 50) / 150, 0.35)})`
-                    : dragOffset < -50
-                      ? `rgba(255, 68, 88, ${Math.min((-dragOffset - 50) / 150, 0.35)})`
-                      : "transparent",
+                background: "transparent",
               }}
             />
             <div
@@ -483,50 +585,48 @@ export default function VoteDeck({ initialItems = [] }) {
                 zIndex: 10,
               }}
             />
-            {dragOffset > 50 ? (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "24px",
-                  left: "24px",
-                  padding: "6px 14px",
-                  borderRadius: "8px",
-                  border: "3px solid #4CDE80",
-                  color: "#4CDE80",
-                  fontSize: "22px",
-                  fontWeight: 800,
-                  letterSpacing: "0.05em",
-                  transform: "rotate(-15deg)",
-                  opacity: Math.min((dragOffset - 50) / 100, 1),
-                  pointerEvents: "none",
-                  zIndex: 11,
-                }}
-              >
-                FUNNY
-              </div>
-            ) : null}
-            {dragOffset < -50 ? (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "24px",
-                  right: "24px",
-                  padding: "6px 14px",
-                  borderRadius: "8px",
-                  border: "3px solid #FF4458",
-                  color: "#FF4458",
-                  fontSize: "22px",
-                  fontWeight: 800,
-                  letterSpacing: "0.05em",
-                  transform: "rotate(15deg)",
-                  opacity: Math.min((-dragOffset - 50) / 100, 1),
-                  pointerEvents: "none",
-                  zIndex: 11,
-                }}
-              >
-                NOPE
-              </div>
-            ) : null}
+            <div
+              ref={funnyStampRef}
+              style={{
+                position: "absolute",
+                top: "24px",
+                left: "24px",
+                padding: "6px 14px",
+                borderRadius: "8px",
+                border: "3px solid #4CDE80",
+                color: "#4CDE80",
+                fontSize: "22px",
+                fontWeight: 800,
+                letterSpacing: "0.05em",
+                transform: "rotate(-15deg)",
+                opacity: 0,
+                pointerEvents: "none",
+                zIndex: 11,
+              }}
+            >
+              FUNNY
+            </div>
+            <div
+              ref={nopeStampRef}
+              style={{
+                position: "absolute",
+                top: "24px",
+                right: "24px",
+                padding: "6px 14px",
+                borderRadius: "8px",
+                border: "3px solid #FF4458",
+                color: "#FF4458",
+                fontSize: "22px",
+                fontWeight: 800,
+                letterSpacing: "0.05em",
+                transform: "rotate(15deg)",
+                opacity: 0,
+                pointerEvents: "none",
+                zIndex: 11,
+              }}
+            >
+              NOPE
+            </div>
               <div className="w-full">
                 {current.imageUrl ? (
                   <div

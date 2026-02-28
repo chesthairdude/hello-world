@@ -355,19 +355,7 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
       >
         <PageTransition>
           <div>
-            <div style={{ marginBottom: "36px", textAlign: "center" }}>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--text-tertiary)",
-                  marginBottom: "8px",
-                }}
-              >
-                Hall of Fame
-              </p>
+            <div style={{ marginBottom: "20px", textAlign: "center" }}>
               <h1
                 style={{
                   fontSize: "28px",

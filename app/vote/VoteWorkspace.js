@@ -230,12 +230,34 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
         style={{
           marginLeft: "220px",
           minHeight: "100vh",
+          position: "relative",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: "32px 24px",
         }}
       >
+        {mode === "vote" ? (
+          <p
+            style={{
+              position: "absolute",
+              top: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              margin: 0,
+              textAlign: "center",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "var(--text-secondary)",
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            use buttons/arrow keys/drag to vote
+          </p>
+        ) : null}
         <PageTransition>
           <div
             style={{
@@ -245,21 +267,6 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
               transition: "max-width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           >
-            {mode === "vote" ? (
-              <p
-                style={{
-                  margin: "0 0 12px 0",
-                  textAlign: "center",
-                  fontSize: "12px",
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                use buttons/arrow keys/drag to vote
-              </p>
-            ) : null}
             {mode === "vote" ? (
               <VoteDeck initialItems={initialItems} />
             ) : (
