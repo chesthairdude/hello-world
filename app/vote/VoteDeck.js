@@ -339,7 +339,7 @@ export default function VoteDeck({ initialItems = [] }) {
                     Missing image
                   </div>
                 )}
-                <div className="flex items-center justify-center px-8 pb-6 pt-6">
+                <div style={{ padding: "24px 32px 32px" }} className="flex items-center justify-center">
                   <p
                     style={{
                       textAlign: "center",
@@ -348,6 +348,8 @@ export default function VoteDeck({ initialItems = [] }) {
                       lineHeight: 1.5,
                       color: "var(--text-primary)",
                       letterSpacing: "-0.01em",
+                      maxWidth: "320px",
+                      margin: "0 auto",
                     }}
                   >
                     {captionText || `Caption unavailable (${current.captionId})`}
@@ -458,7 +460,16 @@ export default function VoteDeck({ initialItems = [] }) {
             </div>
           </div>
 
-          <div className="mt-14 flex items-center justify-center gap-[60px]">
+          <div
+            style={{
+              paddingTop: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "60px",
+              width: "100%",
+            }}
+          >
             <button
               type="button"
               onClick={() => submitVote(-1, "left")}
