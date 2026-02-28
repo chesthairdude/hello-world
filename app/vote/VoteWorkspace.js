@@ -246,6 +246,21 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
             }}
           >
             {mode === "vote" ? (
+              <p
+                style={{
+                  margin: "0 0 12px 0",
+                  textAlign: "center",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--text-secondary)",
+                }}
+              >
+                use buttons/arrow keys/drag to vote
+              </p>
+            ) : null}
+            {mode === "vote" ? (
               <VoteDeck initialItems={initialItems} />
             ) : (
               <UploadPanel onResultsChange={setUploadExpanded} />

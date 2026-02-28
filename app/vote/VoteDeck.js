@@ -6,7 +6,7 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-const SWIPE_THRESHOLD = 100;
+const SWIPE_THRESHOLD = 60;
 let cachedVoteItems = null;
 
 export function setCachedVoteItems(items) {
@@ -320,10 +320,11 @@ export default function VoteDeck({ initialItems = [] }) {
     if (isSubmittingRef.current || swipeDirection) {
       return;
     }
-    dragRef.current = { dragging: true, startX: event.clientX, currentX: event.clientX };
     if (cardRef.current) {
       cardRef.current.style.transition = "none";
+      cardRef.current.style.willChange = "transform";
     }
+    dragRef.current = { dragging: true, startX: event.clientX, currentX: event.clientX };
   }
 
   function handleWindowMouseMove(event) {
@@ -344,7 +345,8 @@ export default function VoteDeck({ initialItems = [] }) {
     const offset = dragRef.current.currentX - dragRef.current.startX;
 
     if (cardRef.current) {
-      cardRef.current.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      cardRef.current.style.willChange = "auto";
     }
 
     if (offset > SWIPE_THRESHOLD) {
@@ -367,7 +369,8 @@ export default function VoteDeck({ initialItems = [] }) {
     }
     dragRef.current.dragging = false;
     if (cardRef.current) {
-      cardRef.current.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      cardRef.current.style.willChange = "auto";
     }
     setDragOffset(0);
   }
@@ -380,10 +383,11 @@ export default function VoteDeck({ initialItems = [] }) {
     if (!point) {
       return;
     }
-    dragRef.current = { dragging: true, startX: point.clientX, currentX: point.clientX };
     if (cardRef.current) {
       cardRef.current.style.transition = "none";
+      cardRef.current.style.willChange = "transform";
     }
+    dragRef.current = { dragging: true, startX: point.clientX, currentX: point.clientX };
   }
 
   function handleTouchMove(event) {
@@ -438,13 +442,13 @@ export default function VoteDeck({ initialItems = [] }) {
             style={{
               cursor: dragRef.current.dragging ? "grabbing" : "grab",
               userSelect: "none",
-              opacity: swipeDirection ? 0 : Math.max(0, 1 - Math.abs(dragOffset) / 400),
+              opacity: swipeDirection ? 0 : 1,
               transform:
                 swipeDirection === "left"
                   ? "translateX(-120%) rotate(-20deg)"
                   : swipeDirection === "right"
                     ? "translateX(120%) rotate(20deg)"
-                    : `translateX(${dragOffset}px) rotate(${dragOffset * 0.05}deg) perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`,
+                    : `translateX(${dragOffset}px) rotate(${dragOffset * 0.02}deg) perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`,
               transition: swipeDirection
                 ? "transform 0.32s ease, opacity 0.32s ease"
                 : dragRef.current.dragging
@@ -540,6 +544,8 @@ export default function VoteDeck({ initialItems = [] }) {
                     <img
                       src={current.imageUrl}
                       alt="Caption candidate"
+                      draggable="false"
+                      onDragStart={(event) => event.preventDefault()}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -547,6 +553,9 @@ export default function VoteDeck({ initialItems = [] }) {
                         objectPosition: "center",
                         backgroundColor: "var(--card-bg)",
                         borderRadius: "20px 20px 0 0",
+                        userSelect: "none",
+                        WebkitUserDrag: "none",
+                        pointerEvents: "none",
                       }}
                     />
                   </div>

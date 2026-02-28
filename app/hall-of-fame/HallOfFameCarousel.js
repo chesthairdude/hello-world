@@ -133,73 +133,106 @@ export default function HallOfFameCarousel({ items = [] }) {
                 fontWeight: 600,
                 color: "var(--text-primary)",
                 lineHeight: 1.5,
-                marginBottom: "20px",
+                marginBottom: 0,
               }}
             >
               {current.captionContent}
             </p>
+          </div>
+        </div>
 
+        <div style={{ marginTop: "4px", width: "100%" }}>
+          <div
+            style={{
+              marginBottom: "8px",
+              width: "100%",
+              padding: "0 4px",
+            }}
+          >
             <div
               style={{
-                padding: "12px 16px",
-                borderRadius: "12px",
-                background: "var(--stats-bg)",
-                border: "1px solid var(--stats-border)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "6px",
+                padding: "0 2px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "#4CDE80",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                😂 {current.likes} funny
+              </span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "#FF4458",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {current.dislikes} not funny 😐
+              </span>
+            </div>
+            <div
+              style={{
+                position: "relative",
+                height: "14px",
+                width: "100%",
+                borderRadius: "999px",
+                background: "rgba(255, 68, 88, 0.45)",
+                backdropFilter: "blur(16px) saturate(180%)",
+                WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                border: "1px solid var(--glass-border)",
+                boxShadow:
+                  "inset 0 1px 3px rgba(0, 0, 0, 0.10), inset 0 -1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0,0,0,0.04)",
+                overflow: "hidden",
               }}
             >
               <div
+                className="laugh-meter-fill"
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "6px",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: `${Math.round(current.ratio * 100)}%`,
+                  background: "#4CDE80",
+                  borderRadius: "999px",
                 }}
-              >
-                <span style={{ fontSize: "11px", fontWeight: 700, color: "#4CDE80" }}>
-                  😂 {current.likes} funny
-                </span>
-                <span style={{ fontSize: "11px", fontWeight: 700, color: "#FF4458" }}>
-                  {current.dislikes} not funny 😐
-                </span>
-              </div>
+              />
               <div
                 style={{
-                  position: "relative",
-                  height: "12px",
-                  width: "100%",
+                  position: "absolute",
+                  top: "1px",
+                  left: "6px",
+                  right: "6px",
+                  height: "4px",
                   borderRadius: "999px",
-                  background: "rgba(255, 68, 88, 0.45)",
-                  backdropFilter: "blur(16px) saturate(180%)",
-                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
-                  border: "1px solid var(--glass-border)",
-                  boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.08)",
-                  overflow: "hidden",
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%)",
+                  pointerEvents: "none",
+                  zIndex: 2,
                 }}
-              >
-                <div
-                  style={{
-                    height: "100%",
-                    width: `${Math.round(current.ratio * 100)}%`,
-                    background: "#4CDE80",
-                    borderRadius: "999px",
-                    transition: "width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  }}
-                />
-              </div>
-              <p
-                style={{
-                  margin: "8px 0 0 0",
-                  textAlign: "center",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: "var(--text-primary)",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                }}
-              >
-                {Math.round(current.ratio * 100)}% funny rate
-              </p>
+              />
             </div>
+            <p
+              style={{
+                marginTop: "8px",
+                textAlign: "center",
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+              }}
+            >
+              {Math.round(current.ratio * 100)}% funny rate
+            </p>
           </div>
         </div>
 
