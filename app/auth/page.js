@@ -21,7 +21,7 @@ export default async function AuthPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #e8eeff 0%, #f5f5ff 40%, #ffe8f5 100%)",
+        background: "var(--bg-gradient)",
         fontFamily: "var(--font-geist-sans)",
       }}
     >

@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import VoteDeck from "./VoteDeck";
 import UploadPanel from "./UploadPanel";
+import ThemeToggleButton from "../components/ThemeToggleButton";
 
-export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
-  const [mode, setMode] = useState("vote");
+export default function VoteWorkspace({ initialItems = [], userEmail = "", initialMode = "vote" }) {
+  const [mode, setMode] = useState(initialMode === "upload" ? "upload" : "vote");
   const [uploadExpanded, setUploadExpanded] = useState(false);
 
   return (
@@ -22,19 +24,34 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
           flexDirection: "column",
           gap: "8px",
           backgroundColor: "rgba(255, 255, 255, 0.5)",
+          background: "var(--sidebar-bg)",
           backdropFilter: "blur(32px) saturate(200%)",
           WebkitBackdropFilter: "blur(32px) saturate(200%)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.6)",
+          borderRight: "1px solid var(--sidebar-border)",
           boxShadow: "inset 1px 0 0 rgba(255,255,255,0.7), 4px 0 32px rgba(0,0,0,0.05)",
           zIndex: 40,
         }}
       >
         <div style={{ marginBottom: "24px", paddingLeft: "8px" }}>
-          <h1 style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.03em", color: "#111" }}>
+          <h1
+            style={{
+              fontSize: "22px",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              color: "var(--text-primary)",
+            }}
+          >
             FunnyOrNot
           </h1>
           {userEmail ? (
-            <p style={{ fontSize: "11px", color: "#999", marginTop: "2px", letterSpacing: "0.02em" }}>
+            <p
+              style={{
+                fontSize: "11px",
+                color: "var(--text-secondary)",
+                marginTop: "2px",
+                letterSpacing: "0.02em",
+              }}
+            >
               {userEmail}
             </p>
           ) : null}
@@ -52,8 +69,8 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
             gap: "12px",
             padding: "10px 14px",
             borderRadius: "12px",
-            border: "1px solid rgba(255,255,255,0.5)",
-            backgroundColor: mode === "vote" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.35)",
+            border: "1px solid var(--glass-border)",
+            backgroundColor: mode === "vote" ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             boxShadow:
@@ -61,19 +78,19 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 500,
-            color: "#222",
+            color: "var(--text-primary)",
             transition: "all 0.18s ease",
             textAlign: "left",
             width: "100%",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.65)";
+            e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
             e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
             e.currentTarget.style.transform = "translateY(-1px)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor =
-              mode === "vote" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.35)";
+              mode === "vote" ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
             e.currentTarget.style.boxShadow =
               mode === "vote" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
             e.currentTarget.style.transform = "translateY(0)";
@@ -82,6 +99,43 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
           <span style={{ fontSize: "18px" }}>🗳️</span>
           <span>Voting</span>
         </button>
+
+        <Link
+          href="/hall-of-fame"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            padding: "10px 14px",
+            borderRadius: "12px",
+            border: "1px solid var(--glass-border)",
+            backgroundColor: "var(--nav-item-bg)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: 500,
+            color: "var(--text-primary)",
+            transition: "all 0.18s ease",
+            textAlign: "left",
+            width: "100%",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
+            e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
+            e.currentTarget.style.transform = "translateY(-1px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--nav-item-bg)";
+            e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)";
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          <span style={{ fontSize: "18px" }}>🏆</span>
+          <span>Hall of Fame</span>
+        </Link>
 
         <button
           type="button"
@@ -92,8 +146,8 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
             gap: "12px",
             padding: "10px 14px",
             borderRadius: "12px",
-            border: "1px solid rgba(255,255,255,0.5)",
-            backgroundColor: mode === "upload" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.35)",
+            border: "1px solid var(--glass-border)",
+            backgroundColor: mode === "upload" ? "var(--nav-item-hover)" : "var(--nav-item-bg)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
             boxShadow:
@@ -101,19 +155,19 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 500,
-            color: "#222",
+            color: "var(--text-primary)",
             transition: "all 0.18s ease",
             textAlign: "left",
             width: "100%",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.65)";
+            e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
             e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
             e.currentTarget.style.transform = "translateY(-1px)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor =
-              mode === "upload" ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.35)";
+              mode === "upload" ? "var(--nav-item-hover)" : "var(--nav-item-bg)";
             e.currentTarget.style.boxShadow =
               mode === "upload" ? "0 4px 16px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)";
             e.currentTarget.style.transform = "translateY(0)";
@@ -132,27 +186,27 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
               gap: "12px",
               padding: "10px 14px",
               borderRadius: "12px",
-              border: "1px solid rgba(255,255,255,0.5)",
-              backgroundColor: "rgba(255,255,255,0.35)",
+              border: "1px solid var(--glass-border)",
+              backgroundColor: "var(--nav-item-bg)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
               boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
               cursor: "pointer",
               fontSize: "14px",
               fontWeight: 500,
-              color: "#222",
+              color: "var(--text-primary)",
               transition: "all 0.18s ease",
               textAlign: "left",
               width: "100%",
               marginTop: "8px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.65)";
+              e.currentTarget.style.backgroundColor = "var(--nav-item-hover)";
               e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.35)";
+              e.currentTarget.style.backgroundColor = "var(--nav-item-bg)";
               e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)";
               e.currentTarget.style.transform = "translateY(0)";
             }}
@@ -161,6 +215,8 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "" }) {
             <span>Sign Out</span>
           </button>
         </form>
+
+        <ThemeToggleButton />
       </aside>
 
       <section

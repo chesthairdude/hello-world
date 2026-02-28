@@ -8,12 +8,11 @@ export default function AuthForm() {
         maxWidth: "420px",
         padding: "44px 40px",
         borderRadius: "28px",
-        background: "rgba(255, 255, 255, 0.55)",
+        background: "var(--glass-bg)",
         backdropFilter: "blur(32px) saturate(180%)",
         WebkitBackdropFilter: "blur(32px) saturate(180%)",
-        border: "1px solid rgba(255, 255, 255, 0.65)",
-        boxShadow:
-          "inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.06)",
+        border: "1px solid var(--glass-border)",
+        boxShadow: "var(--glass-highlight), var(--glass-shadow)",
         animation: "authCardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
       }}
     >
@@ -24,7 +23,7 @@ export default function AuthForm() {
             fontWeight: 700,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            color: "#aaa",
+            color: "var(--text-tertiary)",
             marginBottom: "8px",
           }}
         >
@@ -35,7 +34,7 @@ export default function AuthForm() {
             fontSize: "26px",
             fontWeight: 700,
             letterSpacing: "-0.03em",
-            color: "#111",
+            color: "var(--text-primary)",
             lineHeight: 1.2,
             marginBottom: "8px",
           }}
@@ -45,7 +44,7 @@ export default function AuthForm() {
         <p
           style={{
             fontSize: "14px",
-            color: "#888",
+            color: "var(--text-secondary)",
             fontWeight: 400,
           }}
         >

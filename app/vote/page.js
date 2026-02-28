@@ -13,7 +13,7 @@ function shuffleItems(items) {
   return shuffled;
 }
 
-export default async function VotePage() {
+export default async function VotePage({ searchParams }) {
   const supabase = await createClient();
   const {
     data: { session },
@@ -22,8 +22,6 @@ export default async function VotePage() {
   if (!session) {
     redirect("/auth");
   }
-
-  let votedImageIds = new Set();
 
   const { data: existingVotes } = await supabase
     .from("caption_votes")
@@ -34,18 +32,7 @@ export default async function VotePage() {
     .map((vote) => vote.caption_id)
     .filter(Boolean);
 
-  if (votedCaptionIds.length > 0) {
-    const { data: votedCaptions } = await supabase
-      .from("captions")
-      .select("id, image_id")
-      .in("id", votedCaptionIds);
-
-    votedImageIds = new Set(
-      (votedCaptions ?? []).map((caption) => caption.image_id).filter(Boolean)
-    );
-  }
-
-  const { data: captions } = await supabase
+  let captionsQuery = supabase
     .from("captions")
     .select("id, caption_content:content, image:images!inner(id, url)")
     .not("content", "is", null)
@@ -53,6 +40,13 @@ export default async function VotePage() {
     .not("images.url", "is", null)
     .not("images.url", "eq", "")
     .order("created_datetime_utc", { ascending: false });
+
+  if (votedCaptionIds.length > 0) {
+    const escapedIds = votedCaptionIds.map((id) => `"${id}"`).join(",");
+    captionsQuery = captionsQuery.not("id", "in", `(${escapedIds})`);
+  }
+
+  const { data: captions } = await captionsQuery;
 
   const mappedItems = (captions ?? [])
     .map((caption) => {
@@ -73,11 +67,17 @@ export default async function VotePage() {
         item.imageId !== undefined &&
         item.imageUrl !== null &&
         item.imageUrl !== undefined &&
-        String(item.imageUrl).trim() !== "" &&
-        !votedImageIds.has(item.imageId)
+        String(item.imageUrl).trim() !== ""
     );
 
   const items = shuffleItems(mappedItems);
+  const mode = searchParams?.mode === "upload" ? "upload" : "vote";
 
-  return <VoteWorkspace initialItems={items} userEmail={session.user.email ?? ""} />;
+  return (
+    <VoteWorkspace
+      initialItems={items}
+      userEmail={session.user.email ?? ""}
+      initialMode={mode}
+    />
+  );
 }

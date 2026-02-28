@@ -254,11 +254,11 @@ export default function UploadPanel({ onResultsChange }) {
         >
           <div
             style={{
-              background: "rgba(255,255,255,0.55)",
+              background: "var(--glass-bg)",
               backdropFilter: "blur(32px) saturate(180%)",
               WebkitBackdropFilter: "blur(32px) saturate(180%)",
               borderRadius: "20px",
-              border: "1px solid rgba(255,255,255,0.65)",
+              border: "1px solid var(--glass-border)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
               overflow: "hidden",
               animation: "slideInLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
@@ -273,11 +273,11 @@ export default function UploadPanel({ onResultsChange }) {
 
           <div
             style={{
-              background: "rgba(255,255,255,0.55)",
+              background: "var(--glass-bg)",
               backdropFilter: "blur(32px) saturate(180%)",
               WebkitBackdropFilter: "blur(32px) saturate(180%)",
               borderRadius: "20px",
-              border: "1px solid rgba(255,255,255,0.65)",
+              border: "1px solid var(--glass-border)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
               padding: "28px 24px",
               animation: "slideInRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
@@ -289,7 +289,7 @@ export default function UploadPanel({ onResultsChange }) {
                 fontWeight: 700,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                color: "#aaa",
+                color: "var(--text-tertiary)",
                 marginBottom: "16px",
                 fontFamily: "var(--font-geist-sans)",
               }}
@@ -308,11 +308,11 @@ export default function UploadPanel({ onResultsChange }) {
                       padding: "14px 16px",
                       borderRadius: "12px",
                       background: "rgba(255,255,255,0.5)",
-                      border: "1px solid rgba(255,255,255,0.6)",
+                      border: "1px solid var(--glass-border)",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                       fontSize: "14px",
                       fontWeight: 500,
-                      color: isPlaceholder ? "#9ca3af" : "#222",
+                      color: isPlaceholder ? "var(--text-tertiary)" : "var(--text-primary)",
                       lineHeight: 1.5,
                       animation: `fadeInUp 0.4s ease ${index * 0.07}s both`,
                     }}
@@ -342,7 +342,7 @@ export default function UploadPanel({ onResultsChange }) {
                 background: "rgba(255,255,255,0.4)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
-                color: "#666",
+                color: "var(--text-secondary)",
                 fontSize: "13px",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -358,13 +358,12 @@ export default function UploadPanel({ onResultsChange }) {
           style={{
             width: "100%",
             maxWidth: "480px",
-            background: "rgba(255, 255, 255, 0.55)",
+            background: "var(--glass-bg)",
             backdropFilter: "blur(32px) saturate(180%)",
             WebkitBackdropFilter: "blur(32px) saturate(180%)",
             borderRadius: "24px",
-            border: "1px solid rgba(255, 255, 255, 0.65)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.06)",
+            border: "1px solid var(--glass-border)",
+            boxShadow: "var(--glass-highlight), var(--glass-shadow)",
             padding: "36px 32px",
           }}
         >
@@ -374,7 +373,7 @@ export default function UploadPanel({ onResultsChange }) {
               fontWeight: 700,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "#aaa",
+              color: "var(--text-tertiary)",
               marginBottom: "10px",
               fontFamily: "var(--font-geist-sans)",
             }}
@@ -386,7 +385,7 @@ export default function UploadPanel({ onResultsChange }) {
               fontSize: "26px",
               fontWeight: 700,
               letterSpacing: "-0.03em",
-              color: "#111",
+              color: "var(--text-primary)",
               lineHeight: 1.2,
               marginBottom: "28px",
               fontFamily: "var(--font-geist-sans)",
@@ -407,7 +406,7 @@ export default function UploadPanel({ onResultsChange }) {
               height: "120px",
               borderRadius: "16px",
               border: "2px dashed rgba(150, 150, 200, 0.35)",
-              background: "rgba(255,255,255,0.3)",
+              background: "var(--input-bg)",
               backdropFilter: "blur(8px)",
               cursor: "pointer",
               transition: "all 0.2s ease",
@@ -423,7 +422,7 @@ export default function UploadPanel({ onResultsChange }) {
             }}
           >
             <span style={{ fontSize: "28px" }}>🖼️</span>
-            <span style={{ fontSize: "13px", fontWeight: 500, color: "#888" }}>
+            <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--text-secondary)" }}>
               {selectedFile ? selectedFile.name : "Click to choose a file"}
             </span>
             <input
@@ -454,7 +453,7 @@ export default function UploadPanel({ onResultsChange }) {
                   : "rgba(200,200,210,0.3)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
-              color: selectedFile && !isGeneratingCaptions ? "#fff" : "#aaa",
+              color: selectedFile && !isGeneratingCaptions ? "#fff" : "var(--text-tertiary)",
               fontSize: "15px",
               fontWeight: 600,
               letterSpacing: "-0.01em",
@@ -483,7 +482,7 @@ export default function UploadPanel({ onResultsChange }) {
                 style={{
                   fontSize: "11px",
                   fontWeight: 600,
-                  color: "#888",
+                  color: "var(--text-secondary)",
                   marginBottom: "8px",
                   letterSpacing: "0.04em",
                   textTransform: "uppercase",

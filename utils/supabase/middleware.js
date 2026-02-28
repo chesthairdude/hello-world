@@ -31,7 +31,11 @@ export async function updateSession(request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith("/vote") && !user) {
+  if (
+    (request.nextUrl.pathname.startsWith("/vote") ||
+      request.nextUrl.pathname.startsWith("/hall-of-fame")) &&
+    !user
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
     return NextResponse.redirect(url);

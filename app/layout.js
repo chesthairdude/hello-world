@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Geist } from "next/font/google";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -14,9 +15,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={geist.variable}>
+    <html lang="en" className={geist.variable} data-theme="light">
       <body style={{ fontFamily: "var(--font-geist-sans), -apple-system, sans-serif" }}>
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

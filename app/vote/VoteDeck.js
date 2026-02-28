@@ -261,11 +261,11 @@ export default function VoteDeck({ initialItems = [] }) {
   return (
     <section className="mx-auto w-full max-w-[400px]">
       {initialItems.length === 0 ? (
-        <div className="vote-card p-6 text-center text-slate-700">
+        <div className="vote-card p-6 text-center" style={{ color: "var(--text-secondary)" }}>
           No captions available yet.
         </div>
       ) : !current ? (
-        <div className="vote-card p-6 text-center text-emerald-700">
+        <div className="vote-card p-6 text-center" style={{ color: "#4CDE80" }}>
           You have voted on all available captions.
         </div>
       ) : (
@@ -273,7 +273,7 @@ export default function VoteDeck({ initialItems = [] }) {
           <article
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="vote-card relative overflow-hidden"
+            className="vote-card swipe-card relative overflow-hidden"
             style={{
               opacity: swipeDirection ? 0 : 1,
               transform:
@@ -306,18 +306,21 @@ export default function VoteDeck({ initialItems = [] }) {
                   className="h-[60%] w-full rounded-t-[20px] object-cover"
                 />
               ) : (
-                <div className="flex h-[60%] w-full items-center justify-center rounded-t-[20px] bg-slate-100 text-sm text-slate-500">
+                <div
+                  className="flex h-[60%] w-full items-center justify-center rounded-t-[20px] text-sm"
+                  style={{ background: "var(--stats-bg)", color: "var(--text-secondary)" }}
+                >
                   Missing image
                 </div>
               )}
-                <div className="flex h-[40%] items-center justify-center px-6 pb-6 pt-6">
+                <div className="flex h-[40%] items-center justify-center px-8 pb-6 pt-6">
                   <p
                     style={{
                       textAlign: "center",
                       fontSize: "18px",
                       fontWeight: 600,
                       lineHeight: 1.5,
-                      color: "#1a1a1a",
+                      color: "var(--text-primary)",
                       letterSpacing: "-0.01em",
                     }}
                   >
@@ -348,7 +351,7 @@ export default function VoteDeck({ initialItems = [] }) {
                   style={{
                     fontSize: "11px",
                     fontWeight: 700,
-                    color: hasVotes ? "#4CDE80" : "#aaa",
+                    color: hasVotes ? "#4CDE80" : "var(--text-tertiary)",
                     letterSpacing: "0.02em",
                     transition: "color 0.3s ease",
                   }}
@@ -359,7 +362,7 @@ export default function VoteDeck({ initialItems = [] }) {
                   style={{
                     fontSize: "11px",
                     fontWeight: 700,
-                    color: hasVotes ? "#FF4458" : "#aaa",
+                    color: hasVotes ? "#FF4458" : "var(--text-tertiary)",
                     letterSpacing: "0.02em",
                     transition: "color 0.3s ease",
                   }}
@@ -374,10 +377,10 @@ export default function VoteDeck({ initialItems = [] }) {
                     height: "14px",
                     width: "100%",
                     borderRadius: "999px",
-                    background: "rgba(180, 180, 190, 0.25)",
+                    background: "var(--stats-bg)",
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.5)",
+                    border: "1px solid var(--glass-border)",
                     boxShadow: "inset 0 1px 3px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.6)",
                   }}
                 />
@@ -388,16 +391,17 @@ export default function VoteDeck({ initialItems = [] }) {
                     height: "14px",
                     width: "100%",
                     borderRadius: "999px",
-                    background: "rgba(255, 68, 88, 0.75)",
+                    background: "rgba(255, 68, 88, 0.45)",
                     backdropFilter: "blur(16px) saturate(180%)",
                     WebkitBackdropFilter: "blur(16px) saturate(180%)",
-                    border: "1px solid rgba(255, 255, 255, 0.55)",
+                    border: "1px solid var(--glass-border)",
                     boxShadow:
                       "inset 0 1px 3px rgba(0, 0, 0, 0.10), inset 0 -1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0,0,0,0.04)",
                     overflow: "hidden",
                   }}
                 >
                   <div
+                    className="laugh-meter-fill"
                     style={{
                       position: "absolute",
                       top: 0,
@@ -506,7 +510,14 @@ export default function VoteDeck({ initialItems = [] }) {
       )}
 
       {error ? (
-        <p className="mt-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p
+          className="mt-4 rounded-xl px-4 py-3 text-sm"
+          style={{
+            border: "1px solid rgba(255,68,88,0.35)",
+            background: "rgba(255,68,88,0.08)",
+            color: "#FF4458",
+          }}
+        >
           {error}
         </p>
       ) : null}
