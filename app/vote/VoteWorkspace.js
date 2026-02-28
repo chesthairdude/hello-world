@@ -255,7 +255,7 @@ export default function VoteWorkspace({ initialItems = [], userEmail = "", initi
               whiteSpace: "nowrap",
             }}
           >
-            use buttons/arrow keys/drag to vote
+            use buttons/arrow keys/swipe to vote
           </p>
         ) : null}
         <PageTransition>

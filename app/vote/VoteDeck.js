@@ -6,7 +6,7 @@ import { useTheme } from "../providers/ThemeProvider";
 
 const SWIPE_DURATION_MS = 320;
 const METER_TRANSITION = "width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)";
-const SWIPE_THRESHOLD = 30;
+const SWIPE_THRESHOLD = 10;
 let cachedVoteItems = null;
 
 export function setCachedVoteItems(items) {
