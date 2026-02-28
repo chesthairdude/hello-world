@@ -8,7 +8,6 @@ import ThemeToggleButton from "../components/ThemeToggleButton";
 import PageTransition from "../components/PageTransition";
 
 let cachedHallOfFame = null;
-let cachedAverageVotesPerImage = 0;
 let cacheTimestamp = 0;
 const CACHE_TTL = 5 * 60 * 1000;
 
@@ -68,7 +67,6 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
   const supabase = useMemo(() => createClient(), []);
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const [averageVotesPerImage, setAverageVotesPerImage] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -77,7 +75,6 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
       const now = Date.now();
       if (cachedHallOfFame && now - cacheTimestamp < CACHE_TTL) {
         setItems(cachedHallOfFame);
-        setAverageVotesPerImage(cachedAverageVotesPerImage);
         setLoading(false);
         return;
       }
@@ -173,11 +170,9 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
       }
 
       cachedHallOfFame = ranked;
-      cachedAverageVotesPerImage = avgVotes;
       cacheTimestamp = Date.now();
 
       setItems(ranked);
-      setAverageVotesPerImage(avgVotes);
       setLoading(false);
     }
 
@@ -355,7 +350,7 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
       >
         <PageTransition>
           <div>
-            <div style={{ marginBottom: "20px", textAlign: "center" }}>
+            <div style={{ marginBottom: "10px", textAlign: "center" }}>
               <h1
                 style={{
                   fontSize: "28px",
@@ -366,9 +361,6 @@ export default function HallOfFamePageClient({ userEmail = "" }) {
               >
                 The Funniest of All Time
               </h1>
-              <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "8px" }}>
-                Top 20 by community vote · Minimum {averageVotesPerImage.toFixed(0)} votes
-              </p>
             </div>
             <HallOfFameCarousel items={items} />
           </div>

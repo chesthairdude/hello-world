@@ -46,8 +46,10 @@ export default function VoteDeck({ initialItems = [] }) {
   const likeCountRef = useRef(0);
   const dislikeCountRef = useRef(0);
   const dragRef = useRef({ dragging: false, startX: 0, currentX: 0, offset: 0 });
+  const tiltRef = useRef({ x: 0, y: 0, mouseX: 50, mouseY: 50 });
   const cardRef = useRef(null);
   const overlayRef = useRef(null);
+  const specularRef = useRef(null);
   const funnyStampRef = useRef(null);
   const nopeStampRef = useRef(null);
 
@@ -56,10 +58,6 @@ export default function VoteDeck({ initialItems = [] }) {
   const [funnyPercent, setFunnyPercent] = useState(50);
   const [sentiment, setSentiment] = useState(getSentimentCategory(50));
   const [sentimentVisible, setSentimentVisible] = useState(true);
-  const [mouseX, setMouseX] = useState(50);
-  const [mouseY, setMouseY] = useState(50);
-  const [tiltX, setTiltX] = useState(0);
-  const [tiltY, setTiltY] = useState(0);
   const current = useMemo(() => items[0] ?? null, [items]);
   const rawCaptionText =
     current?.captionContent === null || current?.captionContent === undefined
@@ -305,49 +303,50 @@ export default function VoteDeck({ initialItems = [] }) {
     const rotateX = ((y - centerY) / centerY) * -8;
     const rotateY = ((x - centerX) / centerX) * 8;
 
-    setTiltX(rotateX);
-    setTiltY(rotateY);
-    setMouseX((x / rect.width) * 100);
-    setMouseY((y / rect.height) * 100);
+    tiltRef.current = {
+      x: rotateX,
+      y: rotateY,
+      mouseX: (x / rect.width) * 100,
+      mouseY: (y / rect.height) * 100,
+    };
+
+    if (cardRef.current) {
+      cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    }
+
+    if (specularRef.current) {
+      specularRef.current.style.background = `radial-gradient(circle at ${tiltRef.current.mouseX}% ${tiltRef.current.mouseY}%, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+    }
   }
 
   function handleCardMouseLeave() {
     if (dragRef.current.dragging) {
-      dragRef.current.dragging = false;
-      if (cardRef.current) {
-        cardRef.current.style.transition = "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)";
-        cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-        cardRef.current.style.willChange = "auto";
-      }
-      dragRef.current.offset = 0;
-      if (overlayRef.current) {
-        overlayRef.current.style.background = "transparent";
-      }
-      if (funnyStampRef.current) {
-        funnyStampRef.current.style.opacity = "0";
-      }
-      if (nopeStampRef.current) {
-        nopeStampRef.current.style.opacity = "0";
-      }
+      return;
     }
-    setTiltX(0);
-    setTiltY(0);
-    setMouseX(50);
-    setMouseY(50);
+
+    tiltRef.current = { x: 0, y: 0, mouseX: 50, mouseY: 50 };
+
+    if (cardRef.current) {
+      cardRef.current.style.transition = "transform 0.3s ease";
+      cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+    }
+    if (specularRef.current) {
+      specularRef.current.style.background = "transparent";
+    }
   }
 
   function handleMouseDown(event) {
     if (isSubmittingRef.current || swipeDirection) {
       return;
     }
-    setTiltX(0);
-    setTiltY(0);
-    setMouseX(50);
-    setMouseY(50);
+    tiltRef.current = { x: 0, y: 0, mouseX: 50, mouseY: 50 };
     if (cardRef.current) {
       cardRef.current.style.transition = "none";
       cardRef.current.style.willChange = "transform";
       cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+    }
+    if (specularRef.current) {
+      specularRef.current.style.background = "transparent";
     }
     dragRef.current = { dragging: true, startX: event.clientX, currentX: event.clientX, offset: 0 };
   }
@@ -482,14 +481,14 @@ export default function VoteDeck({ initialItems = [] }) {
     if (!point) {
       return;
     }
-    setTiltX(0);
-    setTiltY(0);
-    setMouseX(50);
-    setMouseY(50);
+    tiltRef.current = { x: 0, y: 0, mouseX: 50, mouseY: 50 };
     if (cardRef.current) {
       cardRef.current.style.transition = "none";
       cardRef.current.style.willChange = "transform";
       cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+    }
+    if (specularRef.current) {
+      specularRef.current.style.background = "transparent";
     }
     dragRef.current = { dragging: true, startX: point.clientX, currentX: point.clientX, offset: 0 };
   }
@@ -558,18 +557,14 @@ export default function VoteDeck({ initialItems = [] }) {
               touchAction: "none",
               cursor: dragRef.current.dragging ? "grabbing" : "grab",
               userSelect: "none",
-              opacity: swipeDirection ? 0 : 1,
+              opacity: swipeDirection ? 0 : undefined,
               transform:
                 swipeDirection === "left"
                   ? "translateX(-120%) rotate(-20deg)"
                   : swipeDirection === "right"
                     ? "translateX(120%) rotate(20deg)"
-                    : `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`,
-              transition: swipeDirection
-                ? "transform 0.32s ease, opacity 0.32s ease"
-                : dragRef.current.dragging
-                  ? "none"
-                  : "transform 0.3s ease, opacity 0.3s ease",
+                    : undefined,
+              transition: swipeDirection ? "transform 0.32s ease, opacity 0.32s ease" : undefined,
               transformStyle: "preserve-3d",
             }}
           >
@@ -586,11 +581,12 @@ export default function VoteDeck({ initialItems = [] }) {
               }}
             />
             <div
+              ref={specularRef}
               style={{
                 position: "absolute",
                 inset: 0,
                 borderRadius: "20px",
-                background: `radial-gradient(circle at ${mouseX}% ${mouseY}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+                background: "transparent",
                 pointerEvents: "none",
                 zIndex: 10,
               }}
